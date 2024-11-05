@@ -1,8 +1,8 @@
 # python 3.13.0
 # Flask Core
-pip install Flask==3.0.3
-pip install Flask-JWT-Extended==4.6.0
-pip install Flask-SQLAlchemy==3.1.1
+Flask==3.0.3
+Flask-JWT-Extended==4.6.0
+Flask-SQLAlchemy==3.1.1
 
 # Additional Libraries
 python-dotenv==0.21.0
