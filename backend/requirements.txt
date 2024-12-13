@@ -3,6 +3,8 @@
 Flask==3.0.3
 Flask-JWT-Extended==4.6.0
 Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7
+flask_login==0.6.3
 
 # Additional Libraries
-python-dotenv==0.21.0
+python-dotenv==1.0.1
