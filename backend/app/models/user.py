@@ -13,6 +13,8 @@ class User(db.Model, UserMixin):
     password_hashed = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     role = db.Column(db.String(30))
+    reservations = db.relationship('Reservation', backref='user')
+    notifications = db.relationship('Notification', backref='user')
 
     def __init__(self,username,email,password):
         self.username = username
