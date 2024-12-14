@@ -1,5 +1,5 @@
 from app.app import db
-
+from datetime import datetime
 class Room(db.Model):
     __tablename__ = "rooms"
 
@@ -10,6 +10,8 @@ class Room(db.Model):
     has_projector = db.Column(db.Boolean)
     has_whiteboard = db.Column(db.Boolean)
     status = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
+    
 
     def __init__(self): # ?
         pass
