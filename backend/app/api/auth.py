@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from app.models.user import User
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 
 def auth_routes(app,db):
@@ -8,7 +8,6 @@ def auth_routes(app,db):
     @app.route('/login', methods=['GET','POST'])
     def login():
         if request.method == 'POST':
-
             if not request.is_json:
                 return jsonify(
                     msg="Missing json in request"
@@ -25,25 +24,31 @@ def auth_routes(app,db):
 
             user = User.query.filter_by(username=username).first()
 
-            if not user and not user.check_password(password):
+            if user and user.check_password(password):
+                access_token = create_access_token(identity=username)
+                refresh_token = create_refresh_token(identity=username)
+
+                return jsonify(
+                    message=f"Login Successful, {user}",
+                    access_token=access_token,
+                    refresh_token=refresh_token
+                ) 
+            else:
                 return jsonify(
                     msg='Login Unsuccessful. Please check username and password.'
                 ),400
             
-            access_token = create_access_token(identity=username)
-            refresh_token = create_refresh_token(identity=username)
-
-            return jsonify(
-                message=f"Login Successful, {user}",
-                access_token=access_token,
-                refresh_token=refresh_token
-            ) 
+            
                 
         return 'Login Page'
 
     @app.route('/register', methods=['GET','POST'])
     def register():
         if request.method == 'POST':
+            if not request.is_json:
+                return jsonify(
+                    msg="Missing json in request"
+                ), 400
             data = request.get_json()
             email = data.get('email')
             username = data.get('username')
