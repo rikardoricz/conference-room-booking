@@ -19,6 +19,7 @@ class User(db.Model):
         self.username = username
         self.email = email
         self.password_hashed = generate_password_hash(password)
+        self.role = "user"
 
     def check_password(self, password):
         return check_password_hash(self.password_hashed, password)
