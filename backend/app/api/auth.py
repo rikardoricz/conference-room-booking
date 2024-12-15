@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from app.models.user import User
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token,get_jwt_identity,jwt_required
 
 
 def auth_routes(app,db):
@@ -36,10 +36,8 @@ def auth_routes(app,db):
             else:
                 return jsonify(
                     msg='Login Unsuccessful. Please check username and password.'
-                ),400
+                ),401
             
-            
-                
         return 'Login Page'
 
     @app.route('/register', methods=['GET','POST'])
@@ -60,11 +58,11 @@ def auth_routes(app,db):
             if user_email:
                 return jsonify(
                     msg="Email already used"
-                ), 400
+                ), 409
             if user_name:
                 return jsonify(
                     msg="Username already used"
-                ), 400
+                ), 409
             
             new_user = User(username=username, email=email, password=password)
 
@@ -82,10 +80,9 @@ def auth_routes(app,db):
         return 'Register Page'
 
 
-    # @app.route("/refresh", methods=["POST"])
-    # @jwt_refresh_token_required
-    # def refresh():
-    #     # Get identity from the refresh token
-    #     current_user_jwt = get_jwt_identity()
-    #     new_access_token = create_access_token(identity=current_user_jwt)
-    #     return jsonify(access_token=new_access_token)
+    @app.route("/refresh", methods=["POST"])
+    @jwt_required(refresh=True)
+    def refresh():
+        current_user = get_jwt_identity()
+        new_access_token = create_access_token(identity=current_user)
+        return jsonify(access_token=new_access_token)
