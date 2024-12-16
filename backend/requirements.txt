@@ -8,3 +8,6 @@ flask_login==0.6.3
 Flask-SQLAlchemy==3.1.1
 Flask-Migrate==4.0.7
 psycopg2==2.9.10
+
+# env
+python-dotenv==1.0.1
