@@ -18,8 +18,7 @@ cd conference-room-booking
 cd backend
 python3 -m venv .venv
 . .venv/bin/activate
-pip install Flask
-pip install Flask-SQLAlchemy
+pip install -r requirements.txt
 flask run
 ```
 
