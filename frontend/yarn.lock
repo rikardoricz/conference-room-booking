@@ -1163,10 +1163,10 @@
   dependencies:
     uuid "^8.0.0"
 
-"@expo/cli@0.22.5":
-  version "0.22.5"
-  resolved "https://registry.npmjs.org/@expo/cli/-/cli-0.22.5.tgz"
-  integrity sha512-A2wYKtcBbEEyRUAyUeMDd356UROo1xaMl7ZaZC5tQOdIhvWKelRd4f3QCaI56D9B4EMWLg9pVuPVbAMz8zJ4+A==
+"@expo/cli@0.22.6":
+  version "0.22.6"
+  resolved "https://registry.npmjs.org/@expo/cli/-/cli-0.22.6.tgz"
+  integrity sha512-eDjCnc3uHl2+SJ6aZ5seK0FkMp0W12oAdSI4A/yV8ecYtXzG8X87sfKAISEWt44B4DqJ0a1LEqCD6Vtvc783Mg==
   dependencies:
     "@0no-co/graphql.web" "^1.0.8"
     "@babel/runtime" "^7.20.0"
@@ -1177,7 +1177,7 @@
     "@expo/env" "~0.4.0"
     "@expo/image-utils" "^0.6.0"
     "@expo/json-file" "^9.0.0"
-    "@expo/metro-config" "~0.19.0"
+    "@expo/metro-config" "~0.19.8"
     "@expo/osascript" "^2.0.31"
     "@expo/package-manager" "^1.5.0"
     "@expo/plist" "^0.2.0"
@@ -1321,10 +1321,10 @@
     dotenv-expand "~11.0.6"
     getenv "^1.0.0"
 
-"@expo/fingerprint@0.11.3":
-  version "0.11.3"
-  resolved "https://registry.npmjs.org/@expo/fingerprint/-/fingerprint-0.11.3.tgz"
-  integrity sha512-9lgXmcIePvZ7Wef63XtvuN3HfCUevF4E4tQPdEbH9/dUWwpOvvwQ3KT4OJ9jdh8JJ3nTdO9eDQ/8k8xr1aQ5Kg==
+"@expo/fingerprint@0.11.4":
+  version "0.11.4"
+  resolved "https://registry.npmjs.org/@expo/fingerprint/-/fingerprint-0.11.4.tgz"
+  integrity sha512-FfcvHjrWjOJ17wiMfr1iQ1YDyjlj8qfxG+GDce0khrjNSkzRjVdCOIFsMvfVSBPnOPX5NuZlgMRvMkcPUtGClA==
   dependencies:
     "@expo/spawn-async" "^1.7.2"
     arg "^5.0.2"
@@ -1362,10 +1362,10 @@
     json5 "^2.2.3"
     write-file-atomic "^2.3.0"
 
-"@expo/metro-config@~0.19.0", "@expo/metro-config@0.19.7":
-  version "0.19.7"
-  resolved "https://registry.npmjs.org/@expo/metro-config/-/metro-config-0.19.7.tgz"
-  integrity sha512-6Ti05d6AyvXstMpaRGh2EsdGSJzmOh9ju3gMmcjxckn/cimNL39qRQSrnqYc0R/DEZiRFL7N9mVE/0uG668ojw==
+"@expo/metro-config@~0.19.8", "@expo/metro-config@0.19.8":
+  version "0.19.8"
+  resolved "https://registry.npmjs.org/@expo/metro-config/-/metro-config-0.19.8.tgz"
+  integrity sha512-dVAOetouQYuOTEJ2zR0OTLNPOH6zPkeEt5fY53TK0Wxi1QmtsmH6vEWg05U4zkSJ6f1aXmQ0Za77R8QxuukESA==
   dependencies:
     "@babel/core" "^7.20.0"
     "@babel/generator" "^7.20.5"
@@ -2560,9 +2560,9 @@ camelcase@^6.2.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001688:
-  version "1.0.30001688"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001688.tgz"
-  integrity sha512-Nmqpru91cuABu/DTCXbM2NSRHzM2uVHfPnhJ/1zEAJx/ILBRVmz3pzH4N7DZqbdG0gWClsCC05Oj0mJ/1AWMbA==
+  version "1.0.30001689"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001689.tgz"
+  integrity sha512-CmeR2VBycfa+5/jOfnp/NpWPGd06nf1XYiefUvhXFfZE4GkRc9jv+eGPS4nT558WS/8lYCzV8SlANCIPvbWP1g==
 
 chalk@^2.0.1:
   version "2.4.2"
@@ -2992,9 +2992,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.5.73:
-  version "1.5.73"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.73.tgz"
-  integrity sha512-8wGNxG9tAG5KhGd3eeA0o6ixhiNdgr0DcHWm85XPCphwZgD1lIEoi6t3VERayWao7SF7AAZTw6oARGJeVjH8Kg==
+  version "1.5.74"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.74.tgz"
+  integrity sha512-ck3//9RC+6oss/1Bh9tiAVFy5vfSKbRHAFh7Z3/eTRkEqJeWgymloShB17Vg3Z4nmDNp35vAd1BZ6CMW4Wt6Iw==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -3143,10 +3143,10 @@ expo-constants@~17.0.0, expo-constants@~17.0.3:
     "@expo/config" "~10.0.4"
     "@expo/env" "~0.4.0"
 
-expo-file-system@~18.0.5:
-  version "18.0.5"
-  resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-18.0.5.tgz"
-  integrity sha512-vm7gA+PB7j99hfvBBFMRiti8OeazFK3AZWtDmCi6WQCXDxngXkAJViXhkHyF3xwDKljzlP8+4BIGrKCzbfoObg==
+expo-file-system@~18.0.6:
+  version "18.0.6"
+  resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-18.0.6.tgz"
+  integrity sha512-gGEwIJCXV3/wpIJ/wRyhmieLOSAY7HeFFjb+wEfHs04aE63JYR+rXXV4b7rBpEh1ZgNV9U91zfet/iQG7J8HBQ==
   dependencies:
     web-streams-polyfill "^3.3.2"
 
@@ -3176,10 +3176,10 @@ expo-modules-autolinking@2.0.4:
     require-from-string "^2.0.2"
     resolve-from "^5.0.0"
 
-expo-modules-core@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.npmjs.org/expo-modules-core/-/expo-modules-core-2.1.1.tgz"
-  integrity sha512-yQzYCLR2mre4BNMXuqkeJ0oSNgmGEMI6BcmIzeNZbC2NFEjiaDpKvlV9bclYCtyVhUEVNbJcEPYMr6c1Y4eR4w==
+expo-modules-core@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/expo-modules-core/-/expo-modules-core-2.1.2.tgz"
+  integrity sha512-0OhMU5S8zf9c/CRh1MwiXfOInI9wzz6yiIh5RuR/9J7N6xHRum68hInsPbaSc1UQpo08ZZLM4MPsbpoNRUoqIg==
   dependencies:
     invariant "^2.2.4"
 
@@ -3189,25 +3189,25 @@ expo-secure-store@~14.0.0:
   integrity sha512-VyhtRFXP+7hQmHhKlHIOWid1Q/IRpM7Uif32tZHLZHvQ6FNz2cUkr26XWGvCa7btYbrR6OL++FBFZYjbIcRZTw==
 
 expo@*, expo@~52.0.17:
-  version "52.0.18"
-  resolved "https://registry.npmjs.org/expo/-/expo-52.0.18.tgz"
-  integrity sha512-z+qdUbH0d5JRknE3VrY0s5k+3j5JpsLx4vXRwV4To8Xm5uf3d642FQ2HbuPWFAAhtSKFQsxQAh3iuAUGAWDBhg==
+  version "52.0.19"
+  resolved "https://registry.npmjs.org/expo/-/expo-52.0.19.tgz"
+  integrity sha512-wOb/wbiQa0xqQRhgVBuOhLRus05TSw6fgThVMrPQgdLo24EPuT/ZAiRVcVRdjrEbwOqCDumgQCB7636B9J+jKg==
   dependencies:
     "@babel/runtime" "^7.20.0"
-    "@expo/cli" "0.22.5"
+    "@expo/cli" "0.22.6"
     "@expo/config" "~10.0.6"
     "@expo/config-plugins" "~9.0.12"
-    "@expo/fingerprint" "0.11.3"
-    "@expo/metro-config" "0.19.7"
+    "@expo/fingerprint" "0.11.4"
+    "@expo/metro-config" "0.19.8"
     "@expo/vector-icons" "^14.0.0"
     babel-preset-expo "~12.0.4"
     expo-asset "~11.0.1"
     expo-constants "~17.0.3"
-    expo-file-system "~18.0.5"
+    expo-file-system "~18.0.6"
     expo-font "~13.0.1"
     expo-keep-awake "~14.0.1"
     expo-modules-autolinking "2.0.4"
-    expo-modules-core "2.1.1"
+    expo-modules-core "2.1.2"
     fbemitter "^3.0.0"
     web-streams-polyfill "^3.3.2"
     whatwg-url-without-unicode "8.0.0-3"
@@ -4058,6 +4058,11 @@ jsonfile@^6.0.1:
     universalify "^2.0.0"
   optionalDependencies:
     graceful-fs "^4.1.6"
+
+jwt-decode@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/jwt-decode/-/jwt-decode-4.0.0.tgz"
+  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
 
 kind-of@^6.0.2:
   version "6.0.3"
