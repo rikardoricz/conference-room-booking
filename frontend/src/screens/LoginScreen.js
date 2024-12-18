@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { 
   View, 
   Text, 
@@ -6,9 +6,18 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+import { AuthContext } from '../context/AuthContext'
 import { authStyles } from '../styles/AuthStyles.js'
 
 const LoginScreen = ({ navigation }) => {
+  const { login } = useContext(AuthContext);
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleLogin = () => {
+    login(username, password);
+  };
+
   return (
     <SafeAreaView style={authStyles.container}>
       <Text style={authStyles.title}>Login Screen</Text>
@@ -16,13 +25,17 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           style={authStyles.input}
           placeholder='Username'
+          value={username}
+          onChangeText={setUsername}
         />
         <TextInput
           style={authStyles.input}
           placeholder='Password'
+          value={password}
+          onChangeText={setPassword}
           secureTextEntry
         />
-        <TouchableOpacity style={authStyles.primaryButton}>
+        <TouchableOpacity style={authStyles.primaryButton} onPress={handleLogin}>
           <Text style={authStyles.primaryButtonText}>Login</Text>
         </TouchableOpacity>
 
