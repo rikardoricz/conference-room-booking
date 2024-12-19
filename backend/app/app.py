@@ -19,6 +19,7 @@ def create_app():
     from app.models.reservation import Reservation
     from app.models.room import Room
     from app.models.user import User
+    from app.models.invitiations import Invitation
 
     from app.api.auth import auth_routes
     auth_routes(app,db)

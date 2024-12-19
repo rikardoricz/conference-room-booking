@@ -14,6 +14,7 @@ class User(db.Model):
     role = db.Column(db.String(30))
     reservations = db.relationship('Reservation', backref='user')
     notifications = db.relationship('Notification', backref='user')
+    invitations = db.relationship('Invitation', backref='user')
 
     def __init__(self,username,email,password):
         self.username = username
