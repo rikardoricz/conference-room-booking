@@ -3,23 +3,12 @@ import {
     SafeAreaView,
     Text,
     StyleSheet,
-    TouchableOpacity,
 } from 'react-native'
-import { AuthContext } from '../context/AuthContext'
-import { authStyles } from '../styles/AuthStyles.js'
 
-const HomeScreen = () => {
-  const { logout } = useContext(AuthContext);
+import Tabs from '../navigation/Tabs'
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
-      <Text style={styles.desc}>TBA</Text>
-      <TouchableOpacity style={authStyles.primaryButton} onPress={logout}>
-        <Text style={authStyles.primaryButtonText}>Logout</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
-  );
+const HomeScreen = ({navigation}) => {
+  return <Tabs />
 };
 
 const styles = StyleSheet.create({

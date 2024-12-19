@@ -8,7 +8,6 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import HomeScreen from '../screens/HomeScreen';
 
-
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
@@ -25,18 +24,18 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-    <Stack.Navigator>
-      {userToken ? (
-        // screens after login
-        <Stack.Screen name="Home" component={HomeScreen} />
-      ) : (
-        // screens before login
-        <>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Signup" component={SignupScreen} />
-        </>
-      )}
-    </Stack.Navigator>
+      <Stack.Navigator>
+        {userToken ? (
+          // screens after login
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        ) : (
+          // screens before login
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Signup" component={SignupScreen} />
+          </>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
