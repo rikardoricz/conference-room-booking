@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeTab from '../screens/HomeTab';
-import SettingsTab from '../screens/SettingsTab';
 import RoomsTab from '../screens/RoomsTab';
+import ProfileTab from '../screens/ProfileTab';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,11 +33,20 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={SettingsTab}
-        options={{ title: 'Settings' ,
+        name="Notifications"
+        component={ProfileTab}
+        options={{ title: 'Notifications' ,
         tabBarIcon:({size, color})=>(
-            <Icon name="settings" size={size} color={color} />
+            <Icon name="notifications" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileTab}
+        options={{ title: 'Profile' ,
+        tabBarIcon:({size, color})=>(
+            <Icon name="person" size={size} color={color} />
           ),
         }}
       />
