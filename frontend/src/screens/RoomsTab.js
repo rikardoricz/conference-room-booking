@@ -1,14 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react'
 import {
-    SafeAreaView,
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    ActivityIndicator,
-    Alert,
-    FlatList,
-} from 'react-native'
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
+import * as Animatable from 'react-native-animatable';
 
 import { AuthContext } from '../context/AuthContext'
 
@@ -16,6 +17,7 @@ const RoomsTab = () => {
   const { userToken } = useContext(AuthContext);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchRooms = async () => {
     setLoading(true);
@@ -43,12 +45,18 @@ const RoomsTab = () => {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchRooms();
+    setRefreshing(false);
+  };
+
   useEffect(() => {
     fetchRooms();
   }, []);
 
   const renderRoom = ({ item }) => (
-    <View style={styles.roomItem}>
+    <Animatable.View animation="fadeIn" duration={500} style={styles.roomItem}>
       <Text style={styles.roomName}>{item.name}</Text>
       <Text style={styles.roomDetails}>Capacity: {item.capacity}</Text>
       <Text style={styles.roomDetails}>Location: {item.location}</Text>
@@ -68,7 +76,7 @@ const RoomsTab = () => {
       >
         Status: {item.status}
       </Text>
-    </View>
+    </Animatable.View>
   );
 
   return (
@@ -78,8 +86,14 @@ const RoomsTab = () => {
       ) : rooms.length > 0 ? (
         <FlatList
           data={rooms}
-          keyExtractor={(room) => room.id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={renderRoom}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            /> 
+          }
         />
       ) : (
         <Text style={styles.noRoomsText}>No rooms available.</Text>

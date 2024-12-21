@@ -7,7 +7,9 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  RefreshControl,
 } from 'react-native'
+import * as Animatable from 'react-native-animatable';
 
 import { AuthContext } from '../context/AuthContext'
 
@@ -15,6 +17,7 @@ const NotificationsTab = () => {
   const { userToken } = useContext(AuthContext);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchNotifications = async () => {
     setLoading(true);
@@ -33,7 +36,9 @@ const NotificationsTab = () => {
       }
 
       const data = await response.json();
-      setNotifications(data);
+      if (JSON.stringify(data) !== JSON.stringify(notifications)) {
+        setNotifications(data);
+      }
     } catch (error) {
       console.error('Notifications fetch error:', error.message);
       Alert.alert('Error', 'Failed to fetch notifications. Please try again.');
@@ -46,8 +51,14 @@ const NotificationsTab = () => {
     fetchNotifications();
   }, []);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchNotifications();
+    setRefreshing(false);
+  };
+
   const renderNotification = ({ item }) => (
-    <View style={styles.notificationItem}>
+    <Animatable.View animation="fadeIn" duration={500} style={styles.notificationItem}>
       <Text style={styles.notificationTitle}>{item.title || 'No Title'}</Text>
       <Text style={styles.notificationMessage}>{item.message}</Text>
       <Text style={styles.notificationDate}>
@@ -61,7 +72,7 @@ const NotificationsTab = () => {
       >
         Status: {item.status}
       </Text>
-    </View>
+    </Animatable.View>
   );
 
   if (loading) {
@@ -81,6 +92,12 @@ const NotificationsTab = () => {
             item.notification_id?.toString() || index.toString()
           }
           renderItem={renderNotification}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            /> 
+          }
         />
       ) : (
         <Text style={styles.emptyText}>No notifications found.</Text>
