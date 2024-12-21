@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeTab from '../screens/HomeTab';
 import RoomsTab from '../screens/RoomsTab';
+import NotificationsTab from '../screens/NotificationsTab';
 import ProfileTab from '../screens/ProfileTab';
 
 const Tab = createBottomTabNavigator();
@@ -12,7 +13,10 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={{headerShown: false}}
+      screenOptions={{
+        headerShown: false,
+        animation: 'shift',
+      }}
     >
       <Tab.Screen
         name="Home"
@@ -34,7 +38,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={ProfileTab}
+        component={NotificationsTab}
         options={{ title: 'Notifications' ,
         tabBarIcon:({size, color})=>(
             <Icon name="notifications" size={size} color={color} />
