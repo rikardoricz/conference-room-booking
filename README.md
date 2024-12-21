@@ -17,7 +17,7 @@ cd conference-room-booking
 ```shell
 cd backend
 python3 -m venv .venv
-. .venv/bin/activate
+. .venv/bin/activate (For Windows: .venv\Scripts\activate)
 pip install -r requirements.txt
 flask run
 ```
