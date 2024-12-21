@@ -1,6 +1,7 @@
 from flask import jsonify
 from app.models.room import Room
 from app.models.user import User
+from app.models.notification import Notification
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 def user_routes(app,db):
@@ -52,5 +53,19 @@ def user_routes(app,db):
             }
             return jsonify(user_data)
         else:
-            return jsonify({"message": "Room not found"}), 404
+            return jsonify({"message": "User profile not found"}), 404
         
+    @app.route('/notifications', methods=['GET'])
+    @jwt_required()
+    def notifications():
+        notifications = Notification.query.all()
+        notifications_list = [{ 'notification_id': notification.notification_id,
+                                'user_id': notification.user_id,
+                                'reservation_id': notification.reservation_id,
+                                'title': notification.title,
+                                'message': notification.message,
+                                'created_at': notification.created_at.isoformat(),
+                                'status': notification.status
+                        } for notification in notifications]
+
+        return jsonify(notifications_list)
