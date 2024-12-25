@@ -24,7 +24,9 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+      >
         {userToken ? (
           // screens after login
           <Stack.Screen name="HomeScreen" component={HomeScreen} />

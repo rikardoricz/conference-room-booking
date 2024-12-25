@@ -16,4 +16,4 @@ class Notification(db.Model):
         pass
 
     def __repr__(self):
-        return f'<Notification id: {self.room_id}>'
+        return f'<Notification id: {self.notification_id}>'
