@@ -106,7 +106,8 @@ def user_routes(app,db):
         ).first()
 
         if conflict:
-            return jsonify({"error": "Room already reserved during this time."}), 400
+            return jsonify(msg="Room already reserved during this time."
+            ), 400
 
         new_reservation = Reservation(user_id=user_id,room_id=room_id,start_time=start_time,end_time=end_time)
         db.session.add(new_reservation)
