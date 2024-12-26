@@ -60,8 +60,22 @@ def user_routes(app,db):
             }
             return jsonify(user_data)
         else:
-            return jsonify({"message": "User not found"}), 404
+            return jsonify({"message": "User profile not found"}), 404
+        
+    @app.route('/notifications', methods=['GET'])
+    @jwt_required()
+    def notifications():
+        notifications = Notification.query.all()
+        notifications_list = [{ 'notification_id': notification.notification_id,
+                                'user_id': notification.user_id,
+                                'reservation_id': notification.reservation_id,
+                                'title': notification.title,
+                                'message': notification.message,
+                                'created_at': notification.created_at.isoformat(),
+                                'status': notification.status
+                        } for notification in notifications]
 
+        return jsonify(notifications_list)
     
     @app.route('/reserve', methods=['POST'])
     @jwt_required()
@@ -78,15 +92,25 @@ def user_routes(app,db):
         data = request.get_json()
         start_time = data.get('start_time')
         end_time = data.get('end_time')
-        room_id = data.get('room_id') 
+        room_id = data.get('room_id')
+
         if not start_time or not end_time or not room_id:
             return jsonify(
                 msg="Missing argument"
                 ), 400
         
-        # add logic to handle time conflicts of the reservations
+        conflict = Reservation.query.filter(
+            Reservation.room_id == room_id,
+            Reservation.reservation_start < end_time, 
+            Reservation.reservation_end > start_time  
+        ).first()
+
+        if conflict:
+            return jsonify({"error": "Room already reserved during this time."}), 400
 
         new_reservation = Reservation(user_id=user_id,room_id=room_id,start_time=start_time,end_time=end_time)
+        db.session.add(new_reservation)
+        db.session.commit()
 
         return jsonify(
                     msg=f"Reservation Successful, {new_reservation}"
