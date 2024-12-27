@@ -28,11 +28,11 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="Rooms"
+        name="Meetings"
         component={RoomsTab}
-        options={{ title: 'Rooms' ,
+        options={{ title: 'Meetings' ,
         tabBarIcon:({size, color})=>(
-            <Icon name="location-sharp" size={size} color={color} />
+            <Icon name="calendar" size={size} color={color} />
           ),
         }}
       />
