@@ -14,6 +14,14 @@ def auth_routes(app,db):
                 ), 400
 
             data = request.get_json()
+
+            required_fields = ['username', 'password']
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                return jsonify(
+                    msg=f'Missing fields: {", ".join(missing_fields)}'
+                    ), 400
+
             username = data.get('username')
             password = data.get('password')
 
@@ -25,8 +33,8 @@ def auth_routes(app,db):
             user = User.query.filter_by(username=username).first()
 
             if user and user.check_password(password):
-                access_token = create_access_token(identity=username)
-                refresh_token = create_refresh_token(identity=username)
+                access_token = create_access_token(identity=username, additional_claims={"role": user.role})
+                refresh_token = create_refresh_token(identity=username, additional_claims={"role": user.role})
 
                 return jsonify(
                     message=f"Login Successful, {user}",
@@ -47,7 +55,16 @@ def auth_routes(app,db):
                 return jsonify(
                     msg="Missing json in request"
                 ), 400
+            
             data = request.get_json()
+
+            required_fields = ['username', 'email', 'password']
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                return jsonify(
+                    msg=f'Missing fields: {", ".join(missing_fields)}'
+                    ), 400
+
             email = data.get('email')
             username = data.get('username')
             password = data.get('password')
@@ -69,7 +86,7 @@ def auth_routes(app,db):
             db.session.add(new_user)
             db.session.commit()
 
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity=username, additional_claims={"role": new_user.role})
             refresh_token = create_refresh_token(identity=username)
 
             return jsonify(
