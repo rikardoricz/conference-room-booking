@@ -14,6 +14,14 @@ def auth_routes(app,db):
                 ), 400
 
             data = request.get_json()
+
+            required_fields = ['username', 'password']
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                return jsonify(
+                    msg=f'Missing fields: {", ".join(missing_fields)}'
+                    ), 400
+
             username = data.get('username')
             password = data.get('password')
 
@@ -47,7 +55,16 @@ def auth_routes(app,db):
                 return jsonify(
                     msg="Missing json in request"
                 ), 400
+            
             data = request.get_json()
+
+            required_fields = ['username', 'email', 'password']
+            missing_fields = [field for field in required_fields if field not in data]
+            if missing_fields:
+                return jsonify(
+                    msg=f'Missing fields: {", ".join(missing_fields)}'
+                    ), 400
+
             email = data.get('email')
             username = data.get('username')
             password = data.get('password')

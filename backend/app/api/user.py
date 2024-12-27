@@ -95,6 +95,14 @@ def user_routes(app,db):
         user_id = user.user_id
 
         data = request.get_json()
+        
+        required_fields = ['start_time', 'end_time', 'room_id']
+        missing_fields = [field for field in required_fields if field not in data]
+        if missing_fields:
+            return jsonify(
+                msg=f'Missing fields: {", ".join(missing_fields)}'
+                ), 400
+
         start_time = data.get('start_time')
         end_time = data.get('end_time')
         room_id = data.get('room_id')
