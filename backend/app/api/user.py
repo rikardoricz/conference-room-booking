@@ -65,7 +65,12 @@ def user_routes(app,db):
     @app.route('/notifications', methods=['GET'])
     @jwt_required()
     def notifications():
-        notifications = Notification.query.all()
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first()
+        user_id = user.user_id
+
+        notifications = Notification.query.filter_by(user_id=user_id).all()
+
         notifications_list = [{ 'notification_id': notification.notification_id,
                                 'user_id': notification.user_id,
                                 'reservation_id': notification.reservation_id,
@@ -115,7 +120,7 @@ def user_routes(app,db):
 
         return jsonify(
                     msg=f"Reservation Successful, {new_reservation}"
-                ) 
+                )
 
 
         
