@@ -11,6 +11,8 @@ import {
 } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 
+import SmallButton from '../components/SmallButton'
+import ActionsContainer from '../components/ActionsContainer'
 import { AuthContext } from '../context/AuthContext'
 
 const NotificationsTab = () => {
@@ -47,9 +49,36 @@ const NotificationsTab = () => {
     }
   };
 
-  useEffect(() => {
-    fetchNotifications();
-  }, []);
+  const handleUpdateStatus = async (notificationId, newStatus) => {
+    try {
+      const response = await fetch(`http://10.0.2.2:5000/notifications/${notificationId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update notification status');
+      }
+
+      const updatedNotification = await response.json();
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.notification_id === notificationId
+            ? { ...notification, status: newStatus }
+            : notification
+        )
+      );
+      console.log('Notification status updated:', updatedNotification);
+    } catch (error) {
+      console.error('Error updating notification status:', error.message);
+      Alert.alert('Error', 'Failed to update notification status. Please try again.');
+    }
+  };
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -57,23 +86,62 @@ const NotificationsTab = () => {
     setRefreshing(false);
   };
 
+  const getTimeAgo = (createdAt) => {
+    const created = new Date(createdAt);
+    const now = new Date();
+    const diffM = now - created;
+    const diffH = Math.floor(diffM / (1000 * 60 * 60));
+  
+    if (diffH < 1) {
+      const diffMinutes = Math.floor(diffM / (1000 * 60));
+      if (diffMinutes < 1) {
+        return '<1m';
+      }
+      return `${diffMinutes}m`;
+    }
+
+    if (diffH > 24) {
+      return `${Math.round(diffH/24)}d`;
+    }
+  
+    return `${diffH}h`;
+  };
+
+
   const renderNotification = ({ item }) => (
-    <Animatable.View animation="fadeIn" duration={500} style={styles.notificationItem}>
-      <Text style={styles.notificationTitle}>{item.title || 'No Title'}</Text>
+    <Animatable.View animation="fadeIn" duration={500} style={[
+      styles.notificationItem,
+      item.status !== 'unread' && styles.notificationReadItem
+    ]}>
+      <View style={styles.tempContainer}>
+        <Text style={styles.notificationTitle}>{item.title || 'No Title'}</Text>
+        <Text style={styles.notificationDate}>
+          {getTimeAgo(item.created_at)}
+        </Text>
+      </View>
       <Text style={styles.notificationMessage}>{item.message}</Text>
-      <Text style={styles.notificationDate}>
-        Created At: {new Date(item.created_at).toLocaleString()}
-      </Text>
-      <Text
-        style={[
-          styles.notificationStatus,
-          item.status === 'unread' ? styles.statusUnread : styles.statusRead,
+      <ActionsContainer
+        rightButtons={[
+          ...(item.status === 'unread' ? [
+            <SmallButton 
+              title="Mark as read" 
+              backgroundColor="#4BA3C3" 
+              onPress={() => handleUpdateStatus(item.notification_id, 'read')}
+            />
+          ] : []),
+          <SmallButton 
+            title="Archive" 
+            backgroundColor="#175676" 
+            onPress={() => handleUpdateStatus(item.notification_id, 'archived')}
+          />
         ]}
-      >
-        Status: {item.status}
-      </Text>
+      />
     </Animatable.View>
   );
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
 
   if (loading) {
     return (
@@ -114,6 +182,11 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff"
   },
+  tempContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -128,18 +201,25 @@ const styles = StyleSheet.create({
   notificationItem: {
     padding: 15,
     marginVertical: 10,
-    borderRadius: 8,
-    backgroundColor: '#f9f9f9',
+    borderRadius: 10,
+    backgroundColor: '#CCE6F4',
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 10 },
     shadowRadius: 5,
     elevation: 2,
   },
+  notificationReadItem: {
+    backgroundColor: '#EDF9FF'
+  },
   notificationTitle: {
-    fontSize: 18,
+    // fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+  },
+  notificationDate: {
+    // fontSize: 18,
+    color: '123123',
   },
   notificationMessage: {
     fontSize: 16,

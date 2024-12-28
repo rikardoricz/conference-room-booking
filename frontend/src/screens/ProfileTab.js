@@ -55,13 +55,13 @@ const ProfileTab = () => {
           <Text style={styles.title}>Welcome, {profile.username}!</Text>
           <Text style={styles.desc}>Email: {profile.email}</Text>
           <Text style={styles.desc}>Role: {profile.role}</Text>
-          <TouchableOpacity style={authStyles.primaryButton} onPress={logout}>
-            <Text style={authStyles.primaryButtonText}>Logout</Text>
-          </TouchableOpacity>
         </>
       ) : (
         <Text style={styles.error}>Could not load profile data.</Text>
       )}
+      <TouchableOpacity style={authStyles.primaryButton} onPress={logout}>
+        <Text style={authStyles.primaryButtonText}>Logout</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

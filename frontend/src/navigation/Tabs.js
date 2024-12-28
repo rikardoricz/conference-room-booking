@@ -16,6 +16,8 @@ const Tabs = () => {
       screenOptions={{
         headerShown: false,
         animation: 'shift',
+        tabBarActiveTintColor: '#4BA3C3',
+        tabBarInactiveTintColor: '#9C9C9C',
       }}
     >
       <Tab.Screen
@@ -29,6 +31,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Meetings"
+        component={MeetingsTab}
         component={MeetingsTab}
         options={{ title: 'Meetings' ,
         tabBarIcon:({size, color})=>(
