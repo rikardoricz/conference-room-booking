@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeTab from '../screens/HomeTab';
+import MeetingsTab from '../screens/MeetingsTab';
 import RoomsTab from '../screens/RoomsTab';
 import NotificationsTab from '../screens/NotificationsTab';
 import ProfileTab from '../screens/ProfileTab';
@@ -16,6 +17,8 @@ const Tabs = () => {
       screenOptions={{
         headerShown: false,
         animation: 'shift',
+        tabBarActiveTintColor: '#4BA3C3',
+        tabBarInactiveTintColor: '#9C9C9C',
       }}
     >
       <Tab.Screen
@@ -29,7 +32,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Meetings"
-        component={RoomsTab}
+        component={MeetingsTab}
         options={{ title: 'Meetings' ,
         tabBarIcon:({size, color})=>(
             <Icon name="calendar" size={size} color={color} />

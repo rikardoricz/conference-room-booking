@@ -22,14 +22,15 @@ export const authStyles = StyleSheet.create({
     borderRadius: 15
   },
   primaryButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#4BA3C3',
     padding: 15,
     borderRadius: 15,
     alignItems: 'center'
   },
   primaryButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
     color: 'white',
-    fontWeight: 'bold'
   },
   signupContainer: {
     flexDirection: 'row', 
@@ -41,7 +42,7 @@ export const authStyles = StyleSheet.create({
     marginRight: 5, 
   },
   signupLinkText: {
-    color: '#007bff',
+    color: '#4BA3C3',
     fontWeight: 'bold',
   }
 })
