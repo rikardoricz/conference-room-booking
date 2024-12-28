@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeTab from '../screens/HomeTab';
-import RoomsTab from '../screens/RoomsTab';
+import MeetingsTab from '../screens/MeetingsTab';
 import NotificationsTab from '../screens/NotificationsTab';
 import ProfileTab from '../screens/ProfileTab';
 
@@ -29,7 +29,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name="Meetings"
-        component={RoomsTab}
+        component={MeetingsTab}
         options={{ title: 'Meetings' ,
         tabBarIcon:({size, color})=>(
             <Icon name="calendar" size={size} color={color} />
