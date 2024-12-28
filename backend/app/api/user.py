@@ -48,15 +48,11 @@ def user_routes(app,db):
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user).first()
         if user:
-            reservations = Reservation.query.filter_by(user_id=user.user_id).all()
-            notifications = Notification.query.filter_by(user_id=user.user_id).all()
             user_data = {
                 "username": user.username,
                 "email": user.email,
                 "role": user.role,
-                "created_at": user.created_at,
-                "reservations": reservations, # [f'<Reservation id: {self.reservation_id}>']
-                "notifications": notifications # [f'<Notification id: {self.room_id}>']
+                "created_at": user.created_at
             }
             return jsonify(user_data)
         else:
@@ -71,16 +67,42 @@ def user_routes(app,db):
 
         notifications = Notification.query.filter_by(user_id=user_id).all()
 
-        notifications_list = [{ 'notification_id': notification.notification_id,
-                                'user_id': notification.user_id,
-                                'reservation_id': notification.reservation_id,
-                                'title': notification.title,
-                                'message': notification.message,
-                                'created_at': notification.created_at.isoformat(),
-                                'status': notification.status
+        notifications_list = [{ "notification_id": notification.notification_id,
+                                "user_id": notification.user_id,
+                                "reservation_id": notification.reservation_id,
+                                "title": notification.title,
+                                "message": notification.message,
+                                "created_at": notification.created_at.isoformat(),
+                                "updated_at": notification.updated_at.isoformat() if notification.updated_at else None,
+                                "status": notification.status
                         } for notification in notifications]
 
         return jsonify(notifications_list)
+
+    @app.route('/notifications/<int:notification_id>', methods=['PATCH'])
+    @jwt_required()
+    def update_notification_status(notification_id):
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first()
+
+        data = request.get_json()
+        new_status = data.get('status')
+
+        if not new_status:
+            return jsonify({"error": "Missing status field"}), 400
+
+        notification = Notification.query.filter_by(notification_id=notification_id, user_id=user.user_id).first()
+
+        if not notification:
+            return jsonify({"error": "Notification not found"}), 404
+
+        notification.status = new_status
+        db.session.commit()
+
+        return jsonify({"message": "Notification status updated successfully", 
+                        "notification_id": notification.notification_id, 
+                        "updated_at": notification.updated_at.isoformat() if notification.updated_at else None,
+                        "status": notification.status})
     
     @app.route('/reserve', methods=['POST'])
     @jwt_required()

@@ -9,8 +9,9 @@ class Notification(db.Model):
     reservation_id = db.Column(db.Integer, db.ForeignKey('reservations.reservation_id'), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     message = db.Column(db.String(500))
-    created_at = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
-    status = db.Column(db.String(50),nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    status = db.Column(db.String(50), default="unread", nullable=False)
 
     def __init__(self):
         pass
