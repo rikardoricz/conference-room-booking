@@ -4,7 +4,8 @@
     "slug": "frontend",
     "version": "1.0.0",
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ]
   }
 }
