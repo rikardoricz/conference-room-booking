@@ -32,7 +32,6 @@ const Tabs = () => {
       <Tab.Screen
         name="Meetings"
         component={MeetingsTab}
-        component={MeetingsTab}
         options={{ title: 'Meetings' ,
         tabBarIcon:({size, color})=>(
             <Icon name="calendar" size={size} color={color} />
