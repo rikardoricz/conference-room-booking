@@ -16,7 +16,6 @@ const MeetingsTab = () => {
         screenOptions={{
           tabBarLabelStyle: { fontSize: 18, fontWeight: 'bold' },
           tabBarIndicatorStyle: { backgroundColor: '#000' },
-          tabBarStyle: { marginTop: 30 }, // Margines, aby przesunąć zakładki w dół
         }}
       >
         <Tab.Screen name="ScheduleMeeting" component={ScheduleMeetingTab} options={{ title: 'Schedule a meeting' }} />
@@ -31,6 +30,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: 20,
   },
 });
 
