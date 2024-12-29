@@ -1,5 +1,5 @@
 from app.app import db
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 class Reservation(db.Model):
     __tablename__ = "reservations"
@@ -9,7 +9,7 @@ class Reservation(db.Model):
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.room_id'),nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    created_at = db.Column(db.DateTime,default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone(timedelta(hours=1))), nullable=False)
     status = db.Column(db.String(50))
     notifications_reservation_id = db.relationship('Notification', backref='reservation')
     invitations_reservation_id = db.relationship('Invitation', backref='reservation')

@@ -1,7 +1,6 @@
 from app.app import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
-
+from datetime import datetime, timezone, timedelta
 
 class User(db.Model):
     __tablename__ = "users"
@@ -10,7 +9,7 @@ class User(db.Model):
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password_hashed = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone(timedelta(hours=1))), nullable=False)
     role = db.Column(db.String(30))
     reservations = db.relationship('Reservation', backref='user')
     notifications = db.relationship('Notification', backref='user')
