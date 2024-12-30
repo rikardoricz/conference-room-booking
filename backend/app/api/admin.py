@@ -33,6 +33,9 @@ def admin_routes(app,db):
             
             new_room = Room(name,capacity,location,has_projector,has_whiteboard,status)
 
+            db.session.add(new_room)
+            db.session.commit()
+
             return jsonify(
                 msg=f'Succesfully added room, {new_room}'
             )
