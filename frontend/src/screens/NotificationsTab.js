@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 
-import SmallButton from '../components/SmallButton'
+import MyButton from '../components/MyButton'
 import ActionsContainer from '../components/ActionsContainer'
 import { AuthContext } from '../context/AuthContext'
 
@@ -123,15 +123,17 @@ const NotificationsTab = () => {
       <ActionsContainer
         rightButtons={[
           ...(item.status === 'unread' ? [
-            <SmallButton 
+            <MyButton 
               title="Mark as read" 
               backgroundColor="#4BA3C3" 
+              borderColor="#4BA3C3"
               onPress={() => handleUpdateStatus(item.notification_id, 'read')}
             />
           ] : []),
-          <SmallButton 
+          <MyButton 
             title="Archive" 
             backgroundColor="#175676" 
+            borderColor="#175676"
             onPress={() => handleUpdateStatus(item.notification_id, 'archived')}
           />
         ]}
