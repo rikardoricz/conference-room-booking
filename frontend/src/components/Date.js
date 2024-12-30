@@ -46,6 +46,11 @@ const styles = StyleSheet.create({
     height: 90,
     width: 80,
     marginHorizontal: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 2,
   },
   big: {
     fontWeight: 'semi-bold',

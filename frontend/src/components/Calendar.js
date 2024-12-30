@@ -68,15 +68,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    fontFamily: 'Lato_700Bold',
+    fontWeight: 'semi-bold',
     fontSize: 20,
-    fontWeight: 'bold',
   },
   dateSection: {
     width: '100%',
     padding: 10,
   },
   scroll: {
-    height: 150,
+    // height: 120,
   },
 })
 
