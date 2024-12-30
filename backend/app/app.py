@@ -27,6 +27,9 @@ def create_app():
     from app.api.user import user_routes
     user_routes(app,db)
 
+    from app.api.admin import admin_routes
+    admin_routes(app,db)
+
     migrate = Migrate(app,db)
 
     return app
