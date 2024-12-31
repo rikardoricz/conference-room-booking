@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, FlatList, StyleSheet, View } from 'react-native';
 import MeetingDate from '../components/MeetingDate';  
 import MeetingCard from '../components/MeetingCard';  
@@ -11,33 +11,38 @@ const MyMeetingsTab = () => {
       name: 'Marketing Plans',
       time: '15:00 - 16:30',
       location: 'Room C-33. 314',
-      date: new Date(), // Obiekt Date
+      date: new Date(),
+      reservation_user_id: 1, 
     },
     {
       id: 2,
       name: 'Python Lecture',
       time: '15:00 - 16:30',
       location: 'Room C-33. 314',
-      date: new Date(new Date().setDate(new Date().getDate() + 1)), // Jutro
+      date: new Date(new Date().setDate(new Date().getDate() + 1)), 
+      reservation_user_id: 2, 
     },
     {
       id: 3,
-      name: 'Python Lecture',
+      name: 'Git Lecture',
       time: '15:00 - 16:30',
       location: 'Room C-33. 314',
-      date: new Date(new Date().setDate(new Date().getDate() + 1)), // Jutro
+      date: new Date(new Date().setDate(new Date().getDate() + 1)), 
+      reservation_user_id: 1, 
     },
     {
       id: 4,
       name: 'Python Lecture',
       time: '15:00 - 16:30',
       location: 'Room C-33. 314',
-      date: new Date(new Date().setDate(new Date().getDate() + 2)), // Pojutrze
+      date: new Date(new Date().setDate(new Date().getDate() + 2)), 
+      reservation_user_id: 2,
     },
-    // Inne spotkania...
   ]);
 
-  // Grupowanie spotkań po dacie
+  const userId = 1; // ID zalogowanego użytkownika
+
+  // Grupuje spotkania według daty
   const groupMeetingsByDate = (meetings) => {
     const groupedMeetings = {};
 
@@ -54,31 +59,35 @@ const MyMeetingsTab = () => {
 
   const groupedMeetings = groupMeetingsByDate(meetings);
 
-  // Użycie komponentu MeetingCard
+  // Renderowanie MeetingCard z przyciskiem "Cancel", jeśli reservation_user_id pasuje do user_id
   const renderMeeting = ({ item }) => (
-    <MeetingCard 
-      title={item.name} 
-      time={item.time} 
-      location={item.location} 
+    <MeetingCard
+      title={item.name}
+      time={item.time}
+      location={item.location}
+      // Przekazywanie onCancel, jeśli reservation_user_id odpowiada userId
+      onCancel={item.reservation_user_id === userId ? () => handleCancel(item.id) : null}
     />
   );
 
+  const handleCancel = (meetingId) => {
+    // Logika anulowania spotkania
+    console.log(`Cancelled meeting with ID: ${meetingId}`);
+    // Tutaj należy dodać logikę wysyłania żądania anulowania do serwera
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      {Object.keys(groupedMeetings).map((date) => {
-        // Użycie moment() do konwersji klucza na obiekt Date
-        const dateObject = moment(date, 'YYYY-MM-DD').toDate();  // Zamiana stringu na Date
-        return (
-          <View key={date}>
-            <MeetingDate date={dateObject} /> {/* Przekazanie obiektu Date */}
-            <FlatList
-              data={groupedMeetings[date]}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderMeeting}
-            />
-          </View>
-        );
-      })}
+      {Object.keys(groupedMeetings).map((date) => (
+        <View key={date}>
+          <MeetingDate date={new Date(date)} />
+          <FlatList
+            data={groupedMeetings[date]}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderMeeting}
+          />
+        </View>
+      ))}
     </SafeAreaView>
   );
 };
@@ -87,6 +96,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    backgroundColor: '#fff',
   },
 });
 
