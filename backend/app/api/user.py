@@ -21,7 +21,7 @@ def user_routes(app,db):
 
         return jsonify(rooms_list)
         
-    @app.route('/rooms/<id>', methods=['GET'])
+    @app.route('/rooms/<int:id>', methods=['GET'])
     @jwt_required()
     def room(id):
         room = Room.query.get(id)
@@ -36,7 +36,13 @@ def user_routes(app,db):
                 "has_whiteboard": room.has_whiteboard,
                 "status": room.status,
                 "created_at": room.created_at,
-                "reservations": reservations # [f'<Reservation id: {self.reservation_id}>']
+                "reservations": [
+                    {
+                        "reservation_id": reservation.reservation_id,
+                        "reservation_start": reservation.start_time,
+                        "reservation_end": reservation.end_time
+                    } for reservation in reservations
+                ] 
             }
             return jsonify(room_data)
         else:
@@ -136,8 +142,8 @@ def user_routes(app,db):
         
         conflict = Reservation.query.filter(
             Reservation.room_id == room_id,
-            Reservation.reservation_start < end_time, 
-            Reservation.reservation_end > start_time  
+            Reservation.start_time < end_time, 
+            Reservation.end_time > start_time  
         ).first()
 
         if conflict:
