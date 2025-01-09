@@ -31,11 +31,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     marginVertical: 5,
+    
+    // Shadow for iOS
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 1,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 5 },  // Mniejsza wartość przesunięcia
+    shadowOpacity: 0.2,  // Wyższa opacity dla mocniejszego cienia
+    shadowRadius: 6,  // Miękki cień
+
+    // Shadow for Android
+    elevation: 5,  // Możesz zwiększyć tę wartość w razie potrzeby
     position: 'relative',
   },
   title: {
@@ -44,12 +48,12 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginBottom: 0,
     marginHorizontal: 10,
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato-Medium',
   },
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   icon: {
     marginLeft: 10,
@@ -64,9 +68,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10, 
     bottom: 10, 
-    backgroundColor: '#BA324F',
+    backgroundColor: '#D62839',
     borderRadius: 20,
-    paddingVertical: 6,
+    paddingVertical: 4,
     paddingHorizontal: 12,
   },
   cancelButtonText: {
@@ -76,5 +80,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
 
 export default MeetingCard;

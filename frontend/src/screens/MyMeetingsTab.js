@@ -1,53 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, FlatList, StyleSheet, View } from 'react-native';
-import MeetingDate from '../components/MeetingDate';  
-import MeetingCard from '../components/MeetingCard';  
+import React, { useState, useEffect, useContext } from 'react';
+import { SafeAreaView, FlatList, StyleSheet, View, ActivityIndicator, Text, Alert } from 'react-native';
+import MeetingDate from '../components/MeetingDate';
+import MeetingCard from '../components/MeetingCard';
 import moment from 'moment';
+import { AuthContext } from '../context/AuthContext';
 
 const MyMeetingsTab = () => {
-  const [meetings, setMeetings] = useState([
-    {
-      id: 1,
-      name: 'Marketing Plans',
-      time: '15:00 - 16:30',
-      location: 'Room C-33. 314',
-      date: new Date(),
-      reservation_user_id: 1, 
-    },
-    {
-      id: 2,
-      name: 'Python Lecture',
-      time: '15:00 - 16:30',
-      location: 'Room C-33. 314',
-      date: new Date(new Date().setDate(new Date().getDate() + 1)), 
-      reservation_user_id: 2, 
-    },
-    {
-      id: 3,
-      name: 'Git Lecture',
-      time: '15:00 - 16:30',
-      location: 'Room C-33. 314',
-      date: new Date(new Date().setDate(new Date().getDate() + 1)), 
-      reservation_user_id: 1, 
-    },
-    {
-      id: 4,
-      name: 'Python Lecture',
-      time: '15:00 - 16:30',
-      location: 'Room C-33. 314',
-      date: new Date(new Date().setDate(new Date().getDate() + 2)), 
-      reservation_user_id: 2,
-    },
-  ]);
+  const { userToken } = useContext(AuthContext);
+  const [meetings, setMeetings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const loggedUserId = 1; // ID zalogowanego użytkownika (dostosuj do swojego ID)
 
-  const userId = 1; // ID zalogowanego użytkownika
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      try {
+        const response = await fetch('http://10.0.2.2:5000/reservations', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`, // Przekazanie tokena autoryzacji
+          },
+        });
 
-  // Grupuje spotkania według daty
+        if (!response.ok) {
+          throw new Error('Failed to fetch meetings');
+        }
+
+        const data = await response.json();
+
+        const mappedMeetings = data.map((item) => ({
+          id: item.reservation_id,
+          name: item.description || 'Standard Lecture',
+          time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
+          location: `Room ${item.room_id}`,
+          date: moment(item.start_time).format('YYYY-MM-DD'), // Używamy formatu daty do grupowania
+          reservation_user_id: item.user_id,
+        }));
+
+        setMeetings(mappedMeetings); // Ustawienie spotkań
+      } catch (error) {
+        console.error('Error fetching meetings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMeetings();
+  }, [userToken]);
+
+  // Funkcja do grupowania spotkań po dacie
   const groupMeetingsByDate = (meetings) => {
     const groupedMeetings = {};
 
     meetings.forEach((meeting) => {
-      const meetingDate = moment(meeting.date).format('YYYY-MM-DD');
+      const meetingDate = meeting.date;
       if (!groupedMeetings[meetingDate]) {
         groupedMeetings[meetingDate] = [];
       }
@@ -59,35 +65,80 @@ const MyMeetingsTab = () => {
 
   const groupedMeetings = groupMeetingsByDate(meetings);
 
-  // Renderowanie MeetingCard z przyciskiem "Cancel", jeśli reservation_user_id pasuje do user_id
-  const renderMeeting = ({ item }) => (
-    <MeetingCard
-      title={item.name}
-      time={item.time}
-      location={item.location}
-      // Przekazywanie onCancel, jeśli reservation_user_id odpowiada userId
-      onCancel={item.reservation_user_id === userId ? () => handleCancel(item.id) : null}
-    />
-  );
+  // Tworzenie listy spotkań z nagłówkami dat
+  const flattenedMeetings = Object.keys(groupedMeetings).reduce((acc, date) => {
+    acc.push({ type: 'header', date });
+    acc.push(...groupedMeetings[date].map(meeting => ({ ...meeting, type: 'meeting' })));
+    return acc;
+  }, []);
+
+  const renderMeetingItem = ({ item }) => {
+    if (item.type === 'header') {
+      return <MeetingDate date={new Date(item.date)} />;
+    }
+
+    return (
+      <MeetingCard
+        title={item.name}
+        time={item.time}
+        location={item.location}
+        onCancel={item.reservation_user_id === loggedUserId ? () => handleCancel(item.id) : null}
+      />
+    );
+  };
 
   const handleCancel = (meetingId) => {
-    // Logika anulowania spotkania
-    console.log(`Cancelled meeting with ID: ${meetingId}`);
-    // Tutaj należy dodać logikę wysyłania żądania anulowania do serwera
+    // Pytanie o potwierdzenie przed usunięciem spotkania
+    Alert.alert(
+      'Cancel Meeting',
+      'Are you sure you want to cancel this meeting?',
+      [
+        {
+          text: 'Yes',
+          onPress: async () => {
+            try {
+              // Usuwanie spotkania z backendu
+              /* const response = await fetch(`http://10.0.2.2:5000/reservations/${meetingId}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${userToken}`,
+                },
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to cancel meeting');
+              } */
+
+              // Usuwanie spotkania z frontendowego stanu
+              setMeetings((prevMeetings) => prevMeetings.filter((meeting) => meeting.id !== meetingId));
+              console.log(`Cancelled meeting with ID: ${meetingId}`);
+            } catch (error) {
+              console.error('Error cancelling meeting:', error);
+              Alert.alert('Error', 'Failed to cancel the meeting. Please try again.');
+            }
+          },
+        },
+        { text: 'No', style: 'cancel' },
+      ]
+    );
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {Object.keys(groupedMeetings).map((date) => (
-        <View key={date}>
-          <MeetingDate date={new Date(date)} />
-          <FlatList
-            data={groupedMeetings[date]}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderMeeting}
-          />
-        </View>
-      ))}
+      <FlatList
+        data={flattenedMeetings}
+        keyExtractor={(item, index) => `${item.type}-${item.date || item.id}-${index}`}
+        renderItem={renderMeetingItem}
+      />
     </SafeAreaView>
   );
 };
@@ -97,6 +148,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: '#fff',
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
