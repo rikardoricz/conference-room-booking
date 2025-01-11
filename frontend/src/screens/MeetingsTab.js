@@ -28,7 +28,7 @@ const MeetingsTab = () => {
   useEffect(() => {
     const fetchMeetings = async () => {
       try {
-        const response = await fetch('http://10.0.2.2:5000/reservations', {
+        const response = await fetch('http://10.0.2.2:5000/meetings', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const MeetingsTab = () => {
 
         const mappedMeetings = data.map((item) => ({
           id: item.reservation_id,
-          name: item.description || 'Standard Lecture',
+          name: item.title || 'Standard Lecture', //Standard lecture do usunięcia jak title będzie działało 
           time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
           location: `Room ${item.room_id}`,
           date: moment(item.start_time).format('YYYY-MM-DD'),
@@ -121,6 +121,19 @@ const MeetingsTab = () => {
           text: 'Yes',
           onPress: async () => {
             try {
+              // Usuwanie spotkania z backendu
+              /* const response = await fetch(`http://10.0.2.2:5000/reservations/${meetingId}`, {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${userToken}`,
+                },
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to cancel meeting');
+              } */
+
               setMeetings((prevMeetings) => prevMeetings.filter((meeting) => meeting.id !== meetingId));
               console.log(`Cancelled meeting with ID: ${meetingId}`);
             } catch (error) {
