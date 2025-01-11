@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Text, StyleSheet, View, Button } from 'react-native';
 
-import Calendar from '../components/Calendar';
 import TimePicker from '../components/TimePicker';
-import NumberPicker from '../components/NumberPicker';
+import NumberInput from '../components/NumberInput';
 import EquipmentItem from '../components/EquipmentItem';
 import MyButton from '../components/MyButton';
+import DatePicker from '../components/DatePicker';
 
 const SectionWrapper = ({ title, children }) => {
   return (
@@ -18,8 +18,9 @@ const SectionWrapper = ({ title, children }) => {
 
 const ScheduleMeetingTab = () => {
   const [date, setDate] = useState('');
-  const [time, setTime] = useState('10:00');
-  const [participants, setParticipants] = useState(10);
+  const [startTime, setStartTime] = useState('10:00');
+  const [endTime, setEndTime] = useState('11:00');
+  const [participants, setParticipants] = useState('');
   const [equipment, setEquipment] = useState({
     projector: false,
     whiteboard: false,
@@ -34,8 +35,9 @@ const ScheduleMeetingTab = () => {
 
   const clearFilters = () => {
     setDate('');
-    setTime('10:00');
-    setParticipants(10);
+    setStartTime('10:00');
+    setEndTime('11:00');
+    setParticipants('');
     setEquipment({
       projector: false,
       whiteboard: false,
@@ -44,28 +46,39 @@ const ScheduleMeetingTab = () => {
 
 
   const handleScheduleMeeting = () => {
-    // Logika planowania spotkania
-    console.log(`Meeting scheduled on ${date} at ${time}, participants: ${participants}, projector ${equipment.projector}, whiteboard ${equipment.whiteboard}`);
+
+    console.log(`Meeting scheduled on ${date} from ${startTime} to ${endTime}, participants: ${participants}, projector ${equipment.projector}, whiteboard ${equipment.whiteboard}`);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <SectionWrapper title="">
-      {/* calendar */}
-      <Calendar onSelectDate={(date) => setDate(date)} selected={date} />
+      <SectionWrapper title="Date">
+        <View style={styles.wrapperCenter}>
+          <DatePicker
+            selectedDate={date}
+            onDateChange={(newDate) => setDate(newDate)}
+          />
+        </View>
       </SectionWrapper>
 
       <SectionWrapper title="Time">
-        <TimePicker selectedTime={time} onTimeChange={setTime} />
+        <View style={styles.timePickerRow}>
+          <Text style={styles.timePickerLabel}>from</Text>
+          <TimePicker selectedTime={startTime} onTimeChange={setStartTime} />
+          <Text style={styles.timePickerLabel}>to</Text>
+          <TimePicker selectedTime={endTime} onTimeChange={setEndTime} />
+        </View>
       </SectionWrapper>
 
       <SectionWrapper title="Number of participants">
-        <NumberPicker
+        <View style={styles.wrapperCenter}>
+        <NumberInput
           value={participants}
           onValueChange={setParticipants}
           minValue={1}
           maxValue={30}
         /> 
+        </View>
       </SectionWrapper>
 
       <SectionWrapper title="Equipment">
@@ -135,11 +148,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingVertical: 16,
-    // paddingHorizontal: 16,
+    position: 'absolute',
+    bottom: 0,
+    marginHorizontal: 16,
   },
   buttonWrapper: {
     flex: 1,
     marginHorizontal: 8,
+  },
+  timePickerRow: {
+    paddingHorizontal: 36,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 8,
+  },
+  timePickerLabel: {
+    fontSize: 16,
+    color: '#333',
+    marginHorizontal: 8,
+  },
+  wrapperCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

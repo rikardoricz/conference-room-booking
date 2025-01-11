@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Text, FlatList, StyleSheet, View } from 'react-native';
-import Calendar from '../components/Calendar';
+import DatePicker from '../components/DatePicker';
 
 const MyReservationsTab = () => {
   const [reservations, setReservations] = useState([]);
@@ -21,8 +21,8 @@ const MyReservationsTab = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Kalendarz */}
-      <Calendar onSelectDate={(date) => setSelectedDate(date)} selected={selectedDate} />
+      <DatePicker
+      />
 
       <FlatList
         data={reservations.filter(reservation => reservation.date === selectedDate)}
