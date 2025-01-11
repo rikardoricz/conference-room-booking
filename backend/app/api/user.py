@@ -167,7 +167,7 @@ def user_routes(app,db):
     
     @app.route('/meetings', methods=['GET'])
     @jwt_required()
-    def reservations():
+    def meetings():
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user).first()
         user_id = user.user_id
@@ -194,4 +194,21 @@ def user_routes(app,db):
                         } for reservation in reservations_invited]
         meetings.extend(reservations_from_invites)
         return jsonify(meetings)
+    
+    @app.route('/meetings', methods=['GET'])
+    @jwt_required()
+    def reservations():
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first()
+        user_id = user.user_id
 
+        reservations = Reservation.query.filter_by(user_id=user_id).all()
+        reservations_list = [{
+                            "reservation_id":reservation.reservation_id,
+                            "user_id":reservation.user_id,
+                            "room_id":reservation.room_id,
+                            "start_time":reservation.start_time,
+                            "end_time":reservation.end_time,
+                            "created_at":reservation.created_at
+                        } for reservation in reservations]
+        return jsonify(reservations_list)
