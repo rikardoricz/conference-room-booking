@@ -48,7 +48,7 @@ def user_routes(app,db):
             }
             return jsonify(room_data)
         else:
-            return jsonify({"message": "Room not found"}), 404
+            return jsonify({"msg": "Room not found"}), 404
     
     @app.route('/rooms/available', methods=['GET'])
     @jwt_required()
@@ -57,16 +57,16 @@ def user_routes(app,db):
         end_time = request.args.get('endTime')
 
         if not start_time or not end_time:
-            return jsonify({"message": "Both startTime and endTime are required"}), 400
+            return jsonify({"msg": "Both startTime and endTime are required"}), 400
 
         try:
             start_time = datetime.fromisoformat(start_time)
             end_time = datetime.fromisoformat(end_time)
         except ValueError:
-            return jsonify({"message": "Invalid date format."}), 400
+            return jsonify({"msg": "Invalid date format."}), 400
 
         if start_time >= end_time:
-            return jsonify({"message": "startTime must be earlier than endTime"}), 400
+            return jsonify({"msg": "startTime must be earlier than endTime"}), 400
 
         # query rooms with 'ready' status
         available_rooms = Room.query.filter(Room.status == 'ready').all()
@@ -106,7 +106,7 @@ def user_routes(app,db):
             }
             return jsonify(user_data)
         else:
-            return jsonify({"message": "User profile not found"}), 404
+            return jsonify({"msg": "User profile not found"}), 404
         
     @app.route('/notifications', methods=['GET'])
     @jwt_required()
@@ -121,7 +121,7 @@ def user_routes(app,db):
                                 "user_id": notification.user_id,
                                 "reservation_id": notification.reservation_id,
                                 "title": notification.title,
-                                "message": notification.message,
+                                "msg": notification.message,
                                 "created_at": notification.created_at.isoformat(),
                                 "updated_at": notification.updated_at.isoformat() if notification.updated_at else None,
                                 "status": notification.status
@@ -139,17 +139,17 @@ def user_routes(app,db):
         new_status = data.get('status')
 
         if not new_status:
-            return jsonify({"message": "Missing status field"}), 400
+            return jsonify({"msg": "Missing status field"}), 400
 
         notification = Notification.query.filter_by(notification_id=notification_id, user_id=user.user_id).first()
 
         if not notification:
-            return jsonify({"message": "Notification not found"}), 404
+            return jsonify({"msg": "Notification not found"}), 404
 
         notification.status = new_status
         db.session.commit()
 
-        return jsonify({"message": "Notification status updated successfully", 
+        return jsonify({"msg": "Notification status updated successfully", 
                         "notification_id": notification.notification_id, 
                         "updated_at": notification.updated_at.isoformat() if notification.updated_at else None,
                         "status": notification.status})
@@ -159,7 +159,7 @@ def user_routes(app,db):
     def reserve():
         if not request.is_json:
             return jsonify(
-                message="Missing json in request"
+                msg="Missing json in request"
             ), 400
 
         current_user = get_jwt_identity()
@@ -172,7 +172,7 @@ def user_routes(app,db):
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
             return jsonify(
-                message=f'Missing fields: {", ".join(missing_fields)}'
+                msg=f'Missing fields: {", ".join(missing_fields)}'
                 ), 400
 
         start_time = data.get('start_time')
@@ -181,16 +181,16 @@ def user_routes(app,db):
 
         if not start_time or not end_time or not room_id:
             return jsonify(
-                message="Missing argument"
+                msg="Missing argument"
                 ), 400
 
         if start_time >= end_time:
-            return jsonify({"message": "startTime must be earlier than endTime"}), 400
+            return jsonify({"msg": "startTime must be earlier than endTime"}), 400
         room = Reservation.query.filter_by(room_id=room_id).first()
 
         if not room:
             return jsonify(
-                message="Room do not exist"
+                msg="Room do not exist"
             ),400
         
         conflict = Reservation.query.filter(
@@ -200,7 +200,7 @@ def user_routes(app,db):
         ).first()
 
         if conflict:
-            return jsonify(message="Room already reserved during this time."
+            return jsonify(msg="Room already reserved during this time."
             ), 400
 
         new_reservation = Reservation(user_id=user_id,room_id=room_id,start_time=start_time,end_time=end_time)
@@ -208,7 +208,7 @@ def user_routes(app,db):
         db.session.commit()
 
         return jsonify(
-                    message=f"Reservation Successful, {new_reservation}"
+                    msg=f"Reservation Successful, {new_reservation}"
                 )
     
     @app.route('/meetings', methods=['GET'])
