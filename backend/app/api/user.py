@@ -179,6 +179,7 @@ def user_routes(app,db):
         end_time = data.get('end_time')
         room_id = data.get('room_id')
         title = data.get('title')
+        attendees = data.get('attendees', [])
 
         if not start_time or not end_time or not room_id:
             return jsonify(
@@ -208,8 +209,18 @@ def user_routes(app,db):
         db.session.add(new_reservation)
         db.session.commit()
 
+        for attendee_id in attendees:
+            invitation = Invitation(
+                user_id=attendee_id,
+                reservation_id=new_reservation.reservation_id
+            )
+            db.session.add(invitation)
+
+        db.session.commit()
+
+
         return jsonify(
-                    msg=f"Reservation Successful, {new_reservation}"
+                    msg=f"Reservation Successful, {new_reservation}. Invitations sent to {len(attendees)} attendees."
                 )
     
     @app.route('/meetings', methods=['GET'])
@@ -309,7 +320,9 @@ def user_routes(app,db):
     def get_users():
         users = User.query.filter_by(role="user").all()
         users_list = [{
+            "user_id": user.user_id,
             "username": user.username
         }for user in users]
         
         return jsonify(users_list)
+
