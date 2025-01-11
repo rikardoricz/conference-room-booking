@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeTab from '../screens/HomeTab';
 import MeetingsTab from '../screens/MeetingsTab';
+import ReservationsTab from '../screens/ReservationsTab';
 import NotificationsTab from '../screens/NotificationsTab';
 import ProfileTab from '../screens/ProfileTab';
 
@@ -26,6 +27,15 @@ const Tabs = () => {
         options={{ title: 'Home' ,
         tabBarIcon:({size, color})=>(
             <Icon name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Reservations"
+        component={ReservationsTab}
+        options={{ title: 'Reservations' ,
+        tabBarIcon:({size, color})=>(
+            <Icon name="checkmark-circle-outline" size={size} color={color} />
           ),
         }}
       />

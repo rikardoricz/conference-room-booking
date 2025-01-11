@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Text, FlatList, StyleSheet, View } from 'react-native';
 import DatePicker from '../components/DatePicker';
 
-const MyReservationsTab = () => {
+const ReservationsTab = () => {
   const [reservations, setReservations] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
 
@@ -51,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyReservationsTab;
+export default ReservationsTab;
