@@ -5,8 +5,8 @@ class Notification(db.Model):
     __tablename__ = "notifications"
 
     notification_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    reservation_id = db.Column(db.Integer, db.ForeignKey('reservations.reservation_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False)
+    reservation_id = db.Column(db.Integer, db.ForeignKey('reservations.reservation_id', ondelete='CASCADE'), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     message = db.Column(db.String(500))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone(timedelta(hours=1))), nullable=False)

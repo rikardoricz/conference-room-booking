@@ -5,8 +5,8 @@ class Reservation(db.Model):
     __tablename__ = "reservations"
 
     reservation_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'),nullable=False)
-    room_id = db.Column(db.Integer, db.ForeignKey('rooms.room_id'),nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id', ondelete='CASCADE'),nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.room_id', ondelete='CASCADE'),nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone(timedelta(hours=1))), nullable=False)
