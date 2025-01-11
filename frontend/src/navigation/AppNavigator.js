@@ -8,6 +8,7 @@ import { AuthContext } from '../context/AuthContext'
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import HomeScreen from '../screens/HomeScreen';
+import AvailableRoomsScreen from '../screens/AvailableRoomsScreen';
 
 import { Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from "@expo-google-fonts/roboto";
 import { Lato_300Light, Lato_400Regular, Lato_700Bold } from "@expo-google-fonts/lato";
@@ -43,7 +44,10 @@ const AppNavigator = () => {
       >
         {userToken ? (
           // screens after login
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="AvailableRooms" component={AvailableRoomsScreen} />
+          </>
         ) : (
           // screens before login
           <>

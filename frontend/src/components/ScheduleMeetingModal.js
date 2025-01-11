@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import TimePicker from './TimePicker';
 import InputField from './InputField';
@@ -27,6 +28,7 @@ const SectionWrapper = ({ title, children }) => {
 };
 
 const ScheduleMeetingModal = ({ visible, onClose }) => {
+  const navigation = useNavigation();
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('10:00');
   const [endTime, setEndTime] = useState('11:00');
@@ -74,17 +76,21 @@ const ScheduleMeetingModal = ({ visible, onClose }) => {
     return true;
   };
 
-  const handleScheduleMeeting = () => {
-    if (!validateForm()) {
-      return;
-    }
 
-    console.log(`Search for rooms on: ${date}, ${startTime}-${endTime}`);
-    console.log(`Participants: ${participants}`);
-    console.log(`Equipment: projector: ${equipment.projector}, whiteboard: ${equipment.whiteboard}`);
+  const handleSearchRooms = () => {
+    if (!validateForm()) return;
 
+    // go to AvailableRoomsScreen with the search parameters
+    navigation.navigate('AvailableRooms', {
+      date,
+      startTime,
+      endTime,
+      participants,
+      equipment,
+    });
     onClose();
   };
+
 
   return (
     <Modal
@@ -98,7 +104,7 @@ const ScheduleMeetingModal = ({ visible, onClose }) => {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.modalContent}>
               <SafeAreaView style={styles.container}>
-                <Text style={styles.modalTitle}>Schedule Meeting</Text>
+                <Text style={styles.modalTitle}>Schedule a meeting</Text>
                 
                 <SectionWrapper title="Date">
                   <View style={styles.wrapperCenter}>
@@ -167,7 +173,7 @@ const ScheduleMeetingModal = ({ visible, onClose }) => {
                       height={52}
                       fontSize={20}
                       borderRadius={15}
-                      onPress={handleScheduleMeeting}
+                      onPress={handleSearchRooms}
                     />
                   </View>
                 </View>

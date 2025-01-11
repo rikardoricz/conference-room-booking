@@ -71,7 +71,7 @@ def user_routes(app,db):
         # query rooms with 'ready' status
         available_rooms = Room.query.filter(Room.status == 'ready').all()
 
-        # fileter out rooms that are reserved during given time
+        # filter out rooms that are reserved during given time
         filtered_rooms = []
         for room in available_rooms:
             overlapping_reservations = Reservation.query.filter(
