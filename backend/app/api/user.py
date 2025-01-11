@@ -174,7 +174,8 @@ def user_routes(app,db):
 
         reservations = Reservation.query.filter_by(user_id=user_id).all()
         invitations = Invitation.query.filter_by(user_id=user_id).all()
-        reservations_invited = Reservation.query.filter_by(reservation_id=invitations.reservation_id).all()
+        invitation_reservation_ids = [invitation.reservation_id for invitation in invitations]
+        reservations_invited = Reservation.query.filter(Reservation.reservation_id.in_(invitation_reservation_ids)).all()
         reservations_list = [{
                             "reservation_id":reservation.reservation_id,
                             "user_id":reservation.user_id,
@@ -183,7 +184,15 @@ def user_routes(app,db):
                             "end_time":reservation.end_time,
                             "created_at":reservation.created_at
                         } for reservation in reservations]
-
+        reservations_from_invites = [{
+                            "reservation_id":reservation.reservation_id,
+                            "user_id":reservation.user_id,
+                            "room_id":reservation.room_id,
+                            "start_time":reservation.start_time,
+                            "end_time":reservation.end_time,
+                            "created_at":reservation.created_at
+                        } for reservation in reservations_invited]
+        reservations_list.extend(reservations_from_invites)
         return jsonify(reservations_list)
 
         
