@@ -168,7 +168,7 @@ const ScheduleMeetingModal = ({ visible, onClose }) => {
                   </View>
                   <View style={styles.buttonWrapper}>
                     <MyButton 
-                      title="Schedule" 
+                      title="Search" 
                       backgroundColor="#175676" 
                       height={52}
                       fontSize={20}

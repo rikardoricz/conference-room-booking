@@ -9,6 +9,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AvailableRoomsScreen from '../screens/AvailableRoomsScreen';
+import RoomDetailsScreen from '../screens/RoomDetailsScreen';
 
 import { Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from "@expo-google-fonts/roboto";
 import { Lato_300Light, Lato_400Regular, Lato_700Bold } from "@expo-google-fonts/lato";
@@ -47,6 +48,7 @@ const AppNavigator = () => {
           <>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="AvailableRooms" component={AvailableRoomsScreen} />
+            <Stack.Screen name="RoomDetails" component={RoomDetailsScreen} />
           </>
         ) : (
           // screens before login

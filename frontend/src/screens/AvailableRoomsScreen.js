@@ -51,30 +51,10 @@ const AvailableRoomsScreen = ({ route, navigation }) => {
     }
   };
 
-  const handleReserveRoom = async (roomId) => {
-    try {
-      const formattedDate = `${year}-${month}-${day}`;
-      const response = await fetch(`http://localhost:5000/reserve`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${yourAuthToken}`,
-        },
-        body: JSON.stringify({
-          room_id: roomId,
-          start_time: `${formattedDate}T${startTime}:00`,
-          end_time: `${formattedDate}T${endTime}:00`,
-          participants,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to reserve room.');
-      Alert.alert('Success', 'Room reserved successfully.');
-      navigation.goBack(); // back to previous screen
-    } catch (error) {
-      Alert.alert('Error', error.message || 'Failed to reserve the room.');
-    }
+  const handleRoomPress = (roomId) => {
+    navigation.navigate('RoomDetails', { roomId, date, startTime, endTime, participants, equipment }); // Navigate to RoomDetails screen with roomId param
   };
+
 
   return (
     <View style={styles.container}>
@@ -87,17 +67,11 @@ const AvailableRoomsScreen = ({ route, navigation }) => {
           data={availableRooms}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.roomCard}>
-              <Text style={styles.roomName}>{item.name}</Text>
-              <Text>Capacity: {item.capacity}</Text>
-              <Text>Location: {item.location}</Text>
-              <TouchableOpacity
-                style={globalStyles.button}
-                onPress={() => handleReserveRoom(item.id)}
-              >
-                <Text style={globalStyles.buttonText}>Reserve</Text>
-              </TouchableOpacity>
-            </View>
+          <TouchableOpacity style={styles.roomCard} onPress={() => handleRoomPress(item.id)}>
+            <Text style={styles.roomName}>{item.name}</Text>
+            <Text>Capacity: {item.capacity}</Text>
+            <Text>Location: {item.location}</Text>
+          </TouchableOpacity>
           )}
         />
       ) : (
