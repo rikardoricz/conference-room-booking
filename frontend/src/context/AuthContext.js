@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Signup error:', error.message);
-      Alert.alert('error', 'network error. please try again.');
+      Alert.alert('Error', 'Network error. please try again.');
     }
 
   }

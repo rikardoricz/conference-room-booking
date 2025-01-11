@@ -5,6 +5,7 @@ import {
   TextInput, 
   TouchableOpacity, 
   SafeAreaView,
+  Alert,
 } from 'react-native';
 
 import { AuthContext } from '../context/AuthContext'
@@ -18,6 +19,16 @@ const SignupScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   const handleSignup = () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
+
+    if (!username || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all fields.');
+      return;
+    }
+
     signup(username, email, password);
   };
 
