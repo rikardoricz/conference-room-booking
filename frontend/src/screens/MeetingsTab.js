@@ -1,8 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { SafeAreaView, FlatList, StyleSheet, View, ActivityIndicator, Text, Alert } from 'react-native';
+import {
+  SafeAreaView,
+  FlatList, 
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  Text,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
+import moment from 'moment';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import MeetingDate from '../components/MeetingDate';
 import MeetingCard from '../components/MeetingCard';
-import moment from 'moment';
+import ScheduleMeetingModal from '../components/ScheduleMeetingModal';
 import { AuthContext } from '../context/AuthContext';
 
 const MeetingsTab = () => {
@@ -10,6 +22,7 @@ const MeetingsTab = () => {
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
   const loggedUserId = 1; // ID zalogowanego użytkownika (dostosuj do swojego ID)
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchMeetings = async () => {
@@ -18,7 +31,7 @@ const MeetingsTab = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${userToken}`, // Przekazanie tokena autoryzacji
+            Authorization: `Bearer ${userToken}`,
           },
         });
 
@@ -33,11 +46,12 @@ const MeetingsTab = () => {
           name: item.description || 'Standard Lecture',
           time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
           location: `Room ${item.room_id}`,
-          date: moment(item.start_time).format('YYYY-MM-DD'), // Używamy formatu daty do grupowania
+          date: moment(item.start_time).format('YYYY-MM-DD'),
           reservation_user_id: item.user_id,
-        }));
+        }))
+        .filter((meeting) => moment(meeting.date).isSameOrAfter(moment(), 'day'));
 
-        setMeetings(mappedMeetings); // Ustawienie spotkań
+        setMeetings(mappedMeetings);
       } catch (error) {
         console.error('Error fetching meetings:', error);
       } finally {
@@ -48,7 +62,6 @@ const MeetingsTab = () => {
     fetchMeetings();
   }, [userToken]);
 
-  // Funkcja do grupowania spotkań po dacie
   const groupMeetingsByDate = (meetings) => {
     const groupedMeetings = {};
 
@@ -60,17 +73,28 @@ const MeetingsTab = () => {
       groupedMeetings[meetingDate].push(meeting);
     });
 
+
+    Object.keys(groupedMeetings).forEach(date => {
+      groupedMeetings[date].sort((a, b) => {
+        return moment(a.time.split(' - ')[0], 'HH:mm').diff(moment(b.time.split(' - ')[0], 'HH:mm'));
+      });
+    });
+
     return groupedMeetings;
   };
 
-  const groupedMeetings = groupMeetingsByDate(meetings);
+  const sortMeetingsByDate = (groupedMeetings) => {
+    return Object.keys(groupedMeetings)
+      .sort((a, b) => moment(a).diff(moment(b)))
+      .reduce((acc, date) => {
+        acc.push({ type: 'header', date });
+        acc.push(...groupedMeetings[date].map(meeting => ({ ...meeting, type: 'meeting' })));
+        return acc;
+      }, []);
+  };
 
-  // Tworzenie listy spotkań z nagłówkami dat
-  const flattenedMeetings = Object.keys(groupedMeetings).reduce((acc, date) => {
-    acc.push({ type: 'header', date });
-    acc.push(...groupedMeetings[date].map(meeting => ({ ...meeting, type: 'meeting' })));
-    return acc;
-  }, []);
+  const groupedMeetings = groupMeetingsByDate(meetings);
+  const flattenedMeetings = sortMeetingsByDate(groupedMeetings);
 
   const renderMeetingItem = ({ item }) => {
     if (item.type === 'header') {
@@ -88,7 +112,6 @@ const MeetingsTab = () => {
   };
 
   const handleCancel = (meetingId) => {
-    // Pytanie o potwierdzenie przed usunięciem spotkania
     Alert.alert(
       'Cancel Meeting',
       'Are you sure you want to cancel this meeting?',
@@ -97,20 +120,6 @@ const MeetingsTab = () => {
           text: 'Yes',
           onPress: async () => {
             try {
-              // Usuwanie spotkania z backendu
-              /* const response = await fetch(`http://10.0.2.2:5000/reservations/${meetingId}`, {
-                method: 'DELETE',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${userToken}`,
-                },
-              });
-
-              if (!response.ok) {
-                throw new Error('Failed to cancel meeting');
-              } */
-
-              // Usuwanie spotkania z frontendowego stanu
               setMeetings((prevMeetings) => prevMeetings.filter((meeting) => meeting.id !== meetingId));
               console.log(`Cancelled meeting with ID: ${meetingId}`);
             } catch (error) {
@@ -132,12 +141,30 @@ const MeetingsTab = () => {
     );
   }
 
+  const handleSchedulePress = () => {
+    setModalVisible(true);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      {/* Pasek nagłówka */}
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Meetings</Text>
+      </View>
+
       <FlatList
         data={flattenedMeetings}
         keyExtractor={(item, index) => `${item.type}-${item.date || item.id}-${index}`}
         renderItem={renderMeetingItem}
+      />
+
+      <TouchableOpacity onPress={handleSchedulePress} style={styles.addButton}>
+        <Icon name="add-circle" size={64} color="#175676"/>
+      </TouchableOpacity>
+
+      <ScheduleMeetingModal 
+        visible={modalVisible} 
+        onClose={ () => setModalVisible(false)} 
       />
     </SafeAreaView>
   );
@@ -153,6 +180,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  header: {
+    marginTop: 10,
+    padding: 15,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  headerText: {
+    fontSize: 22,
+    fontFamily: 'Lato_400Regular',
+    color: '#000',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+    padding: 10,
   },
 });
 
