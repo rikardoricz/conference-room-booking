@@ -10,7 +10,8 @@ class Room(db.Model):
     has_projector = db.Column(db.Boolean)
     has_whiteboard = db.Column(db.Boolean)
     status = db.Column(db.String(50))
-    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone(timedelta(hours=1))), nullable=False)  
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone(timedelta(hours=1))), nullable=False)
+    photo = db.Column(db.String(250), default="LINK DO BASIC ZDJECIA")  
 
     def __init__(self,name=None,capacity=None,location=None,has_projector=False,has_whiteboard=False,status='Unoccupied'):
         self.name=name
