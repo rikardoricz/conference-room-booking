@@ -255,6 +255,48 @@ def user_routes(app,db):
                             "room_id":reservation.room_id,
                             "start_time":reservation.start_time,
                             "end_time":reservation.end_time,
-                            "created_at":reservation.created_at
+                            "created_at":reservation.created_at,
+                            "title":reservation.title
                         } for reservation in reservations]
         return jsonify(reservations_list)
+
+    @app.route('/reservations/<int:id>', methods=['GET','DELETE'])
+    @jwt_required()
+    def reservation(id):
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first()
+        user_id = user.user_id
+        reservation = Reservation.query.filter_by(reservation_id=id).first()
+
+        if not reservation:
+            return jsonify(
+                msg="Reservation do not exist"
+            ), 400
+
+        if reservation.user_id != user_id:
+            return jsonify(
+                msg="Authorization error"
+            ), 409
+
+        if(request.method=='GET'):
+            room = Room.query.filter_by(room_id=reservation.room_id).first()
+
+            reservation = {
+                                "reservation_id":reservation.reservation_id,
+                                "user_id":reservation.user_id,
+                                "room_id":reservation.room_id,
+                                "start_time":reservation.start_time,
+                                "end_time":reservation.end_time,
+                                "created_at":reservation.created_at,
+                                "title":reservation.title,
+                                "link_to_photo":room.photo
+                            }
+            return jsonify(reservation)
+        
+        db.session.delete(reservation)
+        db.session.commit()
+        return jsonify(
+            msg=f"Reservation with ID {id} has been deleted."
+            )
+        
+        
