@@ -304,4 +304,12 @@ def user_routes(app,db):
             msg=f"Reservation with ID {id} has been deleted."
             )
         
+    @app.route('/users', methods=['GET'])
+    @jwt_required()
+    def get_users():
+        users = User.query.filter_by(role="user").all()
+        users_list = [{
+            "username": user.username
+        }for user in users]
         
+        return jsonify(users_list)

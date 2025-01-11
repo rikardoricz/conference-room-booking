@@ -12,9 +12,9 @@ class User(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.now(timezone(timedelta(hours=1))), nullable=False)
     role = db.Column(db.String(30))
     avatar = db.Column(db.String(250), default="LINK DO BASIC AVATARA")
-    reservations = db.relationship('Reservation', backref='user')
-    notifications = db.relationship('Notification', backref='user')
-    invitations = db.relationship('Invitation', backref='user')
+    reservations = db.relationship('Reservation', backref='user', passive_deletes=True)
+    notifications = db.relationship('Notification', backref='user', passive_deletes=True)
+    invitations = db.relationship('Invitation', backref='user', passive_deletes=True)
 
     def __init__(self,username,email,password):
         self.username = username
