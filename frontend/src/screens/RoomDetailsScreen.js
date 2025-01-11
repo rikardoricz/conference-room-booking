@@ -7,8 +7,12 @@ import {
   Image,
   ActivityIndicator,
   Alert,
+  Modal,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  SafeAreaView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
 import { AuthContext } from '../context/AuthContext'
 import Header from '../components/Header';
 import MyButton from '../components/MyButton';
@@ -17,7 +21,9 @@ const RoomDetailsScreen = ({ route, navigation }) => {
   const { userToken } = useContext(AuthContext);
   const { roomId, date, startTime, endTime, participants } = route.params;
   const [room, setRoom] = useState(null);
+  const [meetingName, setMeetingName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     fetchRoomDetails();
@@ -65,8 +71,15 @@ const RoomDetailsScreen = ({ route, navigation }) => {
   };
 
   const handleRoomReservation = async () => {
-    console.log(`chuj on: ${date}, ${startTime}-${endTime}`);
-    console.log(`chuj: ${participants}`);
+    setIsModalVisible(true);
+  };
+
+  const handleReserve = async () => {
+    if (!meetingName) {
+      Alert.alert('Error', 'Please enter meeting name');
+      return;
+    }
+
     try {
       const [day, month, year] = date.split('/');
       const formattedDate = `${year}-${month}-${day}`;
@@ -83,6 +96,7 @@ const RoomDetailsScreen = ({ route, navigation }) => {
           end_time: `${formattedDate}T${endTime}:00`,
           participants,
           status: 'pending',
+          title: `${meetingName}`,
         }),
       });
 
@@ -94,13 +108,15 @@ const RoomDetailsScreen = ({ route, navigation }) => {
 
       Alert.alert('Success', 'Room reserved successfully.');
       navigation.navigate('HomeScreen'); // go to home screen
+      setIsModalVisible(false); 
+      setMeetingName(''); 
     } catch (error) {
       Alert.alert('Error', error.message || 'Failed to reserve the room.');
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.mainContainer}>
       <Header title="Room description" />
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -142,12 +158,59 @@ const RoomDetailsScreen = ({ route, navigation }) => {
           </View>
         </View>
 
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={isModalVisible}
+        onRequestClose={() => {
+          setIsModalVisible(false);
+        }}
+      >
+      <TouchableWithoutFeedback onPress={() => {setIsModalVisible(false)}}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalContent}>
+              <SafeAreaView style={styles.container}>
+                <Text style={styles.modalTitle}>Enter meeting details</Text>
+
+          <TextInput
+            style={styles.modalInput}
+            placeholder="Enter Meeting Name"
+            value={meetingName}
+            onChangeText={setMeetingName}
+          />
+          <View style={styles.modalButtonContainer}>
+            <MyButton
+              title="Cancel"
+              backgroundColor="#fff" 
+              textColor="#175676"
+              height={40}
+              fontSize={16}
+              borderRadius={10}
+              onPress={() => setIsModalVisible(false)}
+            />
+            <MyButton
+              title="Reserve"
+              backgroundColor="#175676" 
+              height={40}
+              fontSize={16}
+              borderRadius={10}
+              onPress={handleReserve}
+            />
+          </View>
+            </SafeAreaView>
+          </View>
+        </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
   },
   roomImage: {
@@ -184,6 +247,52 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 8,
   },
+  modalInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+    width: '100%',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // dark overlay
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    maxHeight: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  container: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 20,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontFamily: 'Lato_700Bold',
+    textAlign: 'center',
+    marginBottom: 16,
+    color: '#1E1E1E',
+  },
+
 });
 
 export default RoomDetailsScreen;

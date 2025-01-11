@@ -168,7 +168,7 @@ def user_routes(app,db):
 
         data = request.get_json()
         
-        required_fields = ['start_time', 'end_time', 'room_id']
+        required_fields = ['start_time', 'end_time', 'room_id', 'title']
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
             return jsonify(
@@ -178,6 +178,7 @@ def user_routes(app,db):
         start_time = data.get('start_time')
         end_time = data.get('end_time')
         room_id = data.get('room_id')
+        title = data.get('title')
 
         if not start_time or not end_time or not room_id:
             return jsonify(
@@ -203,7 +204,7 @@ def user_routes(app,db):
             return jsonify(msg="Room already reserved during this time."
             ), 400
 
-        new_reservation = Reservation(user_id=user_id,room_id=room_id,start_time=start_time,end_time=end_time)
+        new_reservation = Reservation(user_id=user_id,room_id=room_id,start_time=start_time,end_time=end_time,title=title)
         db.session.add(new_reservation)
         db.session.commit()
 
