@@ -5,6 +5,7 @@ from app.models.reservation import Reservation
 from app.models.notification import Notification
 from app.models.invitiations import Invitation
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import datetime
 
 def user_routes(app,db):
     @app.route('/rooms', methods=['GET'])
@@ -48,6 +49,48 @@ def user_routes(app,db):
             return jsonify(room_data)
         else:
             return jsonify({"message": "Room not found"}), 404
+    
+    @app.route('/rooms/available', methods=['GET'])
+    @jwt_required()
+    def available_rooms():
+        start_time = request.args.get('startTime')
+        end_time = request.args.get('endTime')
+
+        if not start_time or not end_time:
+            return jsonify({"message": "Both startTime and endTime are required"}), 400
+
+        try:
+            start_time = datetime.fromisoformat(start_time)
+            end_time = datetime.fromisoformat(end_time)
+        except ValueError:
+            return jsonify({"message": "Invalid date format."}), 400
+
+        if start_time >= end_time:
+            return jsonify({"message": "startTime must be earlier than endTime"}), 400
+
+        # query rooms with 'ready' status
+        available_rooms = Room.query.filter(Room.status == 'ready').all()
+
+        # fileter out rooms that are reserved during given time
+        filtered_rooms = []
+        for room in available_rooms:
+            overlapping_reservations = Reservation.query.filter(
+                Reservation.room_id == room.room_id,
+                Reservation.start_time < end_time,
+                Reservation.end_time > start_time
+            ).count()
+            if overlapping_reservations == 0:
+                filtered_rooms.append({
+                    "id": room.room_id,
+                    "name": room.name,
+                    "capacity": room.capacity,
+                    "location": room.location,
+                    "has_projector": room.has_projector,
+                    "has_whiteboard": room.has_whiteboard,
+                    "status": room.status,
+                })
+
+        return jsonify(filtered_rooms)
 
     @app.route('/profile', methods=['GET'])
     @jwt_required()
@@ -195,7 +238,7 @@ def user_routes(app,db):
         meetings.extend(reservations_from_invites)
         return jsonify(meetings)
     
-    @app.route('/meetings', methods=['GET'])
+    @app.route('/reservations', methods=['GET'])
     @jwt_required()
     def reservations():
         current_user = get_jwt_identity()
