@@ -3,6 +3,7 @@ from app.models.room import Room
 from app.models.user import User
 from app.models.reservation import Reservation
 from app.models.notification import Notification
+from app.models.invitiations import Invitation
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 def user_routes(app,db):
@@ -139,6 +140,12 @@ def user_routes(app,db):
             return jsonify(
                 msg="Missing argument"
                 ), 400
+        room = Reservation.query.filter_by(room_id=room_id).first()
+
+        if not room:
+            return jsonify(
+                msg="Room do not exist"
+            ),400
         
         conflict = Reservation.query.filter(
             Reservation.room_id == room_id,
@@ -166,7 +173,8 @@ def user_routes(app,db):
         user_id = user.user_id
 
         reservations = Reservation.query.filter_by(user_id=user_id).all()
-
+        invitations = Invitation.query.filter_by(user_id=user_id).all()
+        reservations_invited = Reservation.query.filter_by(reservation_id=invitations.reservation_id).all()
         reservations_list = [{
                             "reservation_id":reservation.reservation_id,
                             "user_id":reservation.user_id,
