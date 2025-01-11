@@ -228,7 +228,8 @@ def user_routes(app,db):
                             "room_id":reservation.room_id,
                             "start_time":reservation.start_time,
                             "end_time":reservation.end_time,
-                            "created_at":reservation.created_at
+                            "created_at":reservation.created_at,
+                            "title":reservation.title
                         } for reservation in reservations]
         reservations_from_invites = [{
                             "reservation_id":reservation.reservation_id,
@@ -236,7 +237,8 @@ def user_routes(app,db):
                             "room_id":reservation.room_id,
                             "start_time":reservation.start_time,
                             "end_time":reservation.end_time,
-                            "created_at":reservation.created_at
+                            "created_at":reservation.created_at,
+                            "title":reservation.title
                         } for reservation in reservations_invited]
         meetings.extend(reservations_from_invites)
         return jsonify(meetings)
@@ -247,6 +249,7 @@ def user_routes(app,db):
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user).first()
         user_id = user.user_id
+        room = Room.query.filter_by(room_id=reservation.room_id).first()
 
         reservations = Reservation.query.filter_by(user_id=user_id).all()
         reservations_list = [{
@@ -256,7 +259,8 @@ def user_routes(app,db):
                             "start_time":reservation.start_time,
                             "end_time":reservation.end_time,
                             "created_at":reservation.created_at,
-                            "title":reservation.title
+                            "title":reservation.title,
+                            "link_to_photo":room.photo
                         } for reservation in reservations]
         return jsonify(reservations_list)
 
