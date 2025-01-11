@@ -13,6 +13,7 @@ import {
   Keyboard,
   SafeAreaView,
 } from 'react-native';
+import MultiSelect from 'react-native-multiple-select';
 import { AuthContext } from '../context/AuthContext'
 import Header from '../components/Header';
 import MyButton from '../components/MyButton';
@@ -22,11 +23,14 @@ const RoomDetailsScreen = ({ route, navigation }) => {
   const { roomId, date, startTime, endTime, participants } = route.params;
   const [room, setRoom] = useState(null);
   const [meetingName, setMeetingName] = useState('');
+  const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     fetchRoomDetails();
+    fetchUsers(); 
   }, []);
 
   const fetchRoomDetails = async () => {
@@ -47,6 +51,27 @@ const RoomDetailsScreen = ({ route, navigation }) => {
       Alert.alert('Error', error.message || 'Failed to fetch room details.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://10.0.2.2:5000/users', { 
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch users.');
+      }
+
+      const data = await response.json();
+      setUsers(data);
+      console.log(data);
+    } catch (error) {
+      Alert.alert('Error', error.message || 'Failed to fetch users.');
     }
   };
 
@@ -79,6 +104,12 @@ const RoomDetailsScreen = ({ route, navigation }) => {
       Alert.alert('Error', 'Please enter meeting name');
       return;
     }
+    if (selectedUsers.length === 0) {
+      Alert.alert("Error", "Please select at least one participant.");
+      return;
+    }
+    console.log("Meeting Name:", meetingName);
+    console.log("Selected Users:", selectedUsers);
 
     try {
       const [day, month, year] = date.split('/');
@@ -97,6 +128,7 @@ const RoomDetailsScreen = ({ route, navigation }) => {
           participants,
           status: 'pending',
           title: `${meetingName}`,
+          attendees: selectedUsers,
         }),
       });
 
@@ -179,6 +211,49 @@ const RoomDetailsScreen = ({ route, navigation }) => {
             value={meetingName}
             onChangeText={setMeetingName}
           />
+
+          <MultiSelect
+            items={users
+              .filter(user => user.username)
+              .map(user => ({ id: user.username, name: user.username }))
+            }
+            uniqueKey="id"
+            onSelectedItemsChange={setSelectedUsers}
+            selectedItems={selectedUsers}
+            selectText="Select attendees"
+            searchInputPlaceholderText="Search users"
+            tagRemoveIconColor="#ccc"
+            tagBorderColor="#ccc"
+            tagTextColor="#333"
+            selectedItemTextColor="#175676"
+            selectedItemIconColor="#175676"
+            itemTextColor="#000"
+            displayKey="name"
+            searchInputStyle={{
+              color: '#333'
+            }}
+            // submitButtonColor="#175676"
+            // submitButtonText="Done"
+            hideSubmitButton
+            styleDropdownMenu={{
+              marginVertical: 10
+            }}
+            styleDropdownMenuSubsection={{
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#CCC',
+              padding: 10,
+              backgroundColor: '#FFF',
+            }}
+            styleSelectorContainer={{
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: '#CCC',
+              backgroundColor: '#FFF',
+              paddingVertical: 10,
+            }}
+          />
+
           <View style={styles.modalButtonContainer}>
             <MyButton
               title="Cancel"
@@ -291,6 +366,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
     color: '#1E1E1E',
+  },
+  modalSectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  userItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  userItemText: {
+    fontSize: 16,
+  },
+  selectedUser: {
+    fontWeight: 'bold',
   },
 
 });

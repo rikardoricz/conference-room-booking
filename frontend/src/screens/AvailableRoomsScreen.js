@@ -7,6 +7,7 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import Header from '../components/Header';
 import { globalStyles } from '../styles/GlobalStyles';
@@ -63,17 +64,30 @@ const AvailableRoomsScreen = ({ route, navigation }) => {
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : availableRooms.length > 0 ? (
-        <FlatList
-          data={availableRooms}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-          <TouchableOpacity style={styles.roomCard} onPress={() => handleRoomPress(item.id)}>
+      <FlatList
+        data={availableRooms}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+        <TouchableOpacity style={styles.roomCard} onPress={() => handleRoomPress(item.id)}>
+          <Image 
+            style={styles.roomImage} 
+            source={{ uri: 'https://github.com/rikardoricz/conference-room-booking/blob/main/assets/room2.jpg' }} // Replace with actual image URL
+          />
+          <View style={styles.roomInfo}>
             <Text style={styles.roomName}>{item.name}</Text>
-            <Text>Capacity: {item.capacity}</Text>
-            <Text>Location: {item.location}</Text>
-          </TouchableOpacity>
-          )}
-        />
+            <Text style={styles.roomCapacity}>
+            <Text style={{ fontWeight: 'bold' }}>👤 {item.capacity}</Text>
+            </Text>
+            <Text style={styles.roomEquipment}>
+              {item.has_projector && 'Projector'}
+              {item.has_projector && item.has_whiteboard ? ', ' : ''}
+              {item.has_whiteboard && 'Whiteboard'}
+            </Text>
+            <Text style={styles.seeMore}>See more...</Text>
+        </View>
+    </TouchableOpacity>
+  )}
+/>
       ) : (
         <Text style={styles.noRooms}>No rooms available.</Text>
       )}
@@ -86,30 +100,53 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
   loading: {
     textAlign: 'center',
     marginVertical: 20,
   },
   roomCard: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#D7EEFF',
+    padding: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  roomImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+  },
+  roomInfo: {
+    flex: 1,
+    marginLeft: 10,
   },
   roomName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  noRooms: {
-    textAlign: 'center',
-    marginTop: 20,
     fontSize: 16,
-    color: 'gray',
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 4,
+  },
+  roomCapacity: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 4,
+  },
+  roomEquipment: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  seeMore: {
+    fontSize: 14,
+    color: '#63A9FF',
+    fontWeight: 'bold',
   },
 });
 

@@ -210,7 +210,6 @@ const styles = StyleSheet.create({
     right: 16,
     backgroundColor: '#fff',
     borderRadius: 50,
-    padding: 10,
   },
 });
 
