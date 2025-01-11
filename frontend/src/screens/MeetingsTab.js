@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MeetingDate from '../components/MeetingDate';
 import MeetingCard from '../components/MeetingCard';
 import ScheduleMeetingModal from '../components/ScheduleMeetingModal';
+import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext';
 
 const MeetingsTab = () => {
@@ -147,10 +148,7 @@ const MeetingsTab = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Pasek nagłówka */}
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Meetings</Text>
-      </View>
+      <Header title="Meetings" />
 
       <FlatList
         data={flattenedMeetings}
@@ -173,7 +171,6 @@ const MeetingsTab = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: '#fff',
   },
   loader: {

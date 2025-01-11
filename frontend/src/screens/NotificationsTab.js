@@ -13,6 +13,7 @@ import * as Animatable from 'react-native-animatable';
 
 import MyButton from '../components/MyButton'
 import ActionsContainer from '../components/ActionsContainer'
+import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext'
 
 const NotificationsTab = () => {
@@ -155,6 +156,7 @@ const NotificationsTab = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Notifications" />
       {notifications.length > 0 ? (
         <FlatList
           data={notifications}
@@ -181,7 +183,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
     backgroundColor: "#fff"
   },
   tempContainer: {

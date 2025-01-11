@@ -8,6 +8,7 @@ import {
     Alert,
 } from 'react-native'
 
+import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext'
 import { authStyles } from '../styles/AuthStyles.js'
 
@@ -48,6 +49,7 @@ const ProfileTab = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Profile" />
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : profile ? (
@@ -69,8 +71,6 @@ const ProfileTab = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 20,
     backgroundColor: "#fff"
   },
   title: {

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
+import Header from '../components/Header';
 import { globalStyles } from '../styles/GlobalStyles';
 import { AuthContext } from '../context/AuthContext'
 
@@ -77,7 +78,7 @@ const AvailableRoomsScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Available Rooms</Text>
+      <Header title="Available Rooms" />
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />

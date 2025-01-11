@@ -5,9 +5,12 @@ import {
     StyleSheet,
 } from 'react-native'
 
+import Header from '../components/Header';
+
 const HomeTab = () => {
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Home" />
       <Text style={styles.title}>Home Tab</Text>
       <Text style={styles.desc}>TBA</Text>
     </SafeAreaView>
@@ -17,8 +20,6 @@ const HomeTab = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 20,
     backgroundColor: "#fff"
   },
   title: {
