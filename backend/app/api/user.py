@@ -241,7 +241,7 @@ def user_routes(app,db):
                             "start_time":reservation.start_time,
                             "end_time":reservation.end_time,
                             "created_at":reservation.created_at,
-                            "title":reservation.title
+                            "title":reservation.title,
                             "link_to_photo":Room.query.filter_by(room_id=reservation.room_id).first().photo
                         } for reservation in reservations]
         reservations_from_invites = [{
@@ -251,7 +251,7 @@ def user_routes(app,db):
                             "start_time":reservation.start_time,
                             "end_time":reservation.end_time,
                             "created_at":reservation.created_at,
-                            "title":reservation.title
+                            "title":reservation.title,
                             "link_to_photo":Room.query.filter_by(room_id=reservation.room_id).first().photo
                         } for reservation in reservations_invited]
         meetings.extend(reservations_from_invites)
