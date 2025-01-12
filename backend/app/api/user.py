@@ -271,6 +271,8 @@ def user_routes(app,db):
                             "end_time":reservation.end_time,
                             "created_at":reservation.created_at,
                             "title":reservation.title,
+                            "has_projector":Room.query.filter_by(room_id=reservation.room_id).first().has_projector,
+                            "has_whiteboard":Room.query.filter_by(room_id=reservation.room_id).first().has_whiteboard,
                             "link_to_photo":Room.query.filter_by(room_id=reservation.room_id).first().photo
                         } for reservation in reservations]
         return jsonify(reservations_list)
