@@ -215,7 +215,7 @@ const RoomDetailsScreen = ({ route, navigation }) => {
           <MultiSelect
             items={users
               .filter(user => user.username)
-              .map(user => ({ id: user.username, name: user.username }))
+              .map(user => ({ id: user.user_id, name: user.username }))
             }
             uniqueKey="id"
             onSelectedItemsChange={setSelectedUsers}
