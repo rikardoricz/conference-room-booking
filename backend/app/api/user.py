@@ -242,6 +242,7 @@ def user_routes(app,db):
                             "end_time":reservation.end_time,
                             "created_at":reservation.created_at,
                             "title":reservation.title
+                            "link_to_photo":Room.query.filter_by(room_id=reservation.room_id).first().photo
                         } for reservation in reservations]
         reservations_from_invites = [{
                             "reservation_id":reservation.reservation_id,
@@ -251,6 +252,7 @@ def user_routes(app,db):
                             "end_time":reservation.end_time,
                             "created_at":reservation.created_at,
                             "title":reservation.title
+                            "link_to_photo":Room.query.filter_by(room_id=reservation.room_id).first().photo
                         } for reservation in reservations_invited]
         meetings.extend(reservations_from_invites)
         return jsonify(meetings)
