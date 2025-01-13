@@ -1,19 +1,21 @@
-import React from 'react';
+import React from 'react'; 
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ReservationCard = ({ title, time, location, hasProjector, hasWhiteboard, imageUrl, onCancel }) => {
+const ReservationCard = ({ title, time, hasProjector, hasWhiteboard, imageUrl, onCancel }) => {
+  console.log(imageUrl);
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: imageUrl }} style={styles.image} />
+        {/* Zmieniono sposób pobierania obrazu na zewnętrzny link */}
+        <Image source={require("../assets/3.jpg")} style={styles.image} />
       </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{title}</Text>
         
         <View style={styles.infoContainer}>
-            <Ionicons name="time-outline" size={15} color="#000000" style={styles.icon} />
-            <Text style={styles.info}>{time}</Text>
+          <Ionicons name="time-outline" size={15} color="#000000" style={styles.icon} />
+          <Text style={styles.info}>{time}</Text>
         </View>
 
         <View style={styles.iconsContainer}>
@@ -54,8 +56,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   image: {
-    width: 60,
-    height: 60,
+    width: 85,
+    height: 85,
     borderRadius: 8,
   },
   detailsContainer: {

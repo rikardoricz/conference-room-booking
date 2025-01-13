@@ -41,7 +41,7 @@ def auth_routes(app,db):
                     access_token=access_token,
                     refresh_token=refresh_token,
                     user_id=user.user_id
-                ) 
+                )
             else:
                 return jsonify(
                     msg='Login Unsuccessful. Please check username and password.'
@@ -102,5 +102,7 @@ def auth_routes(app,db):
     @jwt_required(refresh=True)
     def refresh():
         current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first()
         new_access_token = create_access_token(identity=current_user)
-        return jsonify(access_token=new_access_token)
+        return jsonify(access_token=new_access_token,
+                       user_id=user.user_id)
