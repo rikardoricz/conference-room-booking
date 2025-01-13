@@ -142,18 +142,19 @@ const NotificationsTab = () => {
     </Animatable.View>
   );
 
-  const handleMarkAllRead = () => {
-      try {
+  const handleMarkAllRead = async () => {
+    try {
       for (const notification of notifications) {
-        handleUpdateStatus(notification.notification_id, 'read'); 
+        if (notification.status !== 'archived') {
+          await handleUpdateStatus(notification.notification_id, 'read');
+        }
       }
 
-      setNotifications(prevNotifications => prevNotifications.map(notification => ({
-        ...notification,
-        status: 'read'
-      })));
+      setNotifications(prevNotifications => prevNotifications.map(notification =>
+        notification.status !== 'archived' ? ({ ...notification, status: 'read' }) : notification
+      ));
 
-      console.log('All notifications marked as read');
+      console.log('All non-archived notifications marked as read');
     } catch (error) {
       console.error('Error marking all notifications as read:', error.message);
       Alert.alert('Error', 'Failed to mark all notifications as read. Please try again.');
