@@ -59,7 +59,6 @@ def create_notifications(reservation:Reservation):
 # TODO DODAC TO tam gdzie zmienia sie status
 def send_notifications():
     now = datetime.utcnow()
-    print("send notification")
 
     # fetch notifications that have to be sent now or are late
     notifications = Notification.query.filter(
