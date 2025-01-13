@@ -40,9 +40,9 @@ def admin_routes(app,db):
                 msg=f'Succesfully added room, {new_room}'
             )
 
-     @app.route('/delete-room', methods=['DELETE'])
+    @app.route('/delete-room', methods=['DELETE'])
     @jwt_required()
-    def add_room():
+    def delete_room():
         current_user = get_jwt_identity()
         user = User.query.filter_by(username=current_user).first() 
         
