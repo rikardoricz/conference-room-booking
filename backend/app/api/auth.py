@@ -40,7 +40,8 @@ def auth_routes(app,db):
                     message=f"Login Successful, {user}",
                     access_token=access_token,
                     refresh_token=refresh_token,
-                    user_id=user.user_id
+                    user_id=user.user_id,
+                    role=user.role
                 )
             else:
                 return jsonify(
@@ -105,4 +106,5 @@ def auth_routes(app,db):
         user = User.query.filter_by(username=current_user).first()
         new_access_token = create_access_token(identity=current_user)
         return jsonify(access_token=new_access_token,
-                       user_id=user.user_id)
+                       user_id=user.user_id,
+                       role=user.role)
