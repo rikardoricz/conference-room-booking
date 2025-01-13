@@ -69,10 +69,9 @@ const AvailableRoomsScreen = ({ route, navigation }) => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
         <TouchableOpacity style={styles.roomCard} onPress={() => handleRoomPress(item.id)}>
-          <Image 
-            style={styles.roomImage} 
-            source={{ uri: 'https://github.com/rikardoricz/conference-room-booking/blob/main/assets/room2.jpg' }} // Replace with actual image URL
-          />
+          <View style={styles.imageContainer}>
+                  <Image source={require("../assets/19.jpg")} style={styles.image} />
+          </View>
           <View style={styles.roomInfo}>
             <Text style={styles.roomName}>{item.name}</Text>
             <Text style={styles.roomCapacity}>
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#D7EEFF',
-    padding: 10,
+    padding: 5,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 10,
@@ -118,9 +117,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  roomImage: {
-    width: 80,
-    height: 80,
+  imageContainer: {
+    marginRight: 10,
+  },
+  image: {
+    width: 95,
+    height: 95,
     borderRadius: 8,
   },
   roomInfo: {
