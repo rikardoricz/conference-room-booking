@@ -84,6 +84,7 @@ def auth_routes(app,db):
                 ), 409
             
             new_user = User(username=username, email=email, password=password)
+            new_user.role = 'admin' if username == 'admin' else 'user'
 
             db.session.add(new_user)
             db.session.commit()

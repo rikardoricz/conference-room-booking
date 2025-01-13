@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const login = async (username, password) => {
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }) => {
         setUserToken(data.access_token);
         setRefreshToken(data.refresh_token);
         setUserId(data.user_id);
+        setIsAdmin(data.role === 'admin'); 
 
         const decodedAccessToken = jwtDecode(data.access_token);
         scheduleTokenRefresh(data.refresh_token, decodedAccessToken.exp * 1000);
@@ -101,6 +103,7 @@ export const AuthProvider = ({ children }) => {
         await SecureStore.setItemAsync('userToken', data.access_token);
         setUserToken(data.access_token);
         setUserId(data.user_id);
+        setIsAdmin(data.role === 'admin'); 
 
         const decodedAccessToken = jwtDecode(data.access_token);
         scheduleTokenRefresh(storedRefreshToken, decodedAccessToken.exp * 1000);
@@ -158,7 +161,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userToken, login, logout, signup, userId, loading }}>
+    <AuthContext.Provider value={{ userToken, login, logout, signup, userId, isAdmin, loading }}>
       {children}
     </AuthContext.Provider>
   );

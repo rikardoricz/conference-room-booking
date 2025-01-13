@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -6,13 +6,17 @@ import MeetingsTab from '../screens/MeetingsTab';
 import ReservationsTab from '../screens/ReservationsTab';
 import NotificationsTab from '../screens/NotificationsTab';
 import ProfileTab from '../screens/ProfileTab';
+import AdministrationTab from '../screens/AdministrationTab';
+import { AuthContext } from '../context/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
+  const { isAdmin } = useContext(AuthContext);
+  console.log(isAdmin);
   return (
     <Tab.Navigator
-      initialRouteName="Reservations"
+      initialRouteName={isAdmin ? "Administration" : "Reservations"} 
       screenOptions={{
         headerShown: false,
         animation: 'shift',
@@ -20,6 +24,32 @@ const Tabs = () => {
         tabBarInactiveTintColor: '#9C9C9C',
       }}
     >
+      {isAdmin ? (
+        <>
+        <Tab.Screen
+          name="Administration"
+          component={AdministrationTab}
+          options={{ 
+            title: 'Administration' ,
+            tabBarIcon:({size, color})=>(
+              <Icon name="cog" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileTab}
+          options={{ 
+            title: 'Profile' ,
+            tabBarIcon:({size, color})=>(
+              <Icon name="person" size={size} color={color} />
+            ),
+          }}
+        />
+        </>
+      ) : (
+      <>
+
       <Tab.Screen
         name="Reservations"
         component={ReservationsTab}
@@ -56,6 +86,8 @@ const Tabs = () => {
           ),
         }}
       />
+      </>
+      )}
     </Tab.Navigator>
   );
 };

@@ -18,7 +18,7 @@ import { Lato_300Light, Lato_400Regular, Lato_700Bold } from "@expo-google-fonts
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-  const { userToken, loading } = useContext(AuthContext);
+  const { userToken, loading, isAdmin } = useContext(AuthContext);
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
     Roboto_500Medium,
@@ -46,9 +46,18 @@ const AppNavigator = () => {
         {userToken ? (
           // screens after login
           <>
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen name="AvailableRooms" component={AvailableRoomsScreen} />
-            <Stack.Screen name="RoomDetails" component={RoomDetailsScreen} />
+            {isAdmin ? (
+            // admin screens
+              <>
+                <Stack.Screen name="HomeScreen" component={HomeScreen} />
+              </>
+            ) : (
+              <>
+                <Stack.Screen name="HomeScreen" component={HomeScreen} />
+                <Stack.Screen name="AvailableRooms" component={AvailableRoomsScreen} />
+                <Stack.Screen name="RoomDetails" component={RoomDetailsScreen} />
+              </>
+            )}
           </>
         ) : (
           // screens before login
