@@ -21,6 +21,7 @@ import { AuthContext } from '../context/AuthContext';
 const ReservationsTab = () => {
   const { userToken, userId } = useContext(AuthContext);
   const [reservations, setReservations] = useState([]);
+  const [room, setRoom] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -38,32 +39,71 @@ const ReservationsTab = () => {
           Authorization: `Bearer ${userToken}`,
         },
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to fetch reservations');
       }
-
+  
       const data = await response.json();
-
-      const mappedReservations = data.map((item) => ({
-        id: item.reservation_id,
-        name: item.title,
-        time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
-        date: moment(item.start_time).format('YYYY-MM-DD'),
-        hasProjector: item.has_projector,
-        hasWhiteboard: item.has_whiteboard,
-        imageUrl: item.link_to_photo,
-        reservation_user_id: item.user_id,
-      }))
-      .filter((reservation) => moment(reservation.date).isSameOrAfter(moment(), 'day'));
-
-      setReservations(mappedReservations);
+  
+      const fetchRoomDetails = async (roomId) => {
+        try {
+          const roomResponse = await fetch(`http://10.0.2.2:5000/rooms/${roomId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${userToken}`,
+            },
+          });
+  
+          if (!roomResponse.ok) {
+            throw new Error('Failed to fetch room details');
+          }
+  
+          const roomData = await roomResponse.json();
+          return {
+            location: roomData.location,
+            capacity: roomData.capacity,
+            name: roomData.name,
+          };
+        } catch (error) {
+          console.error(`Error fetching details for room ${roomId}:`, error);
+          return { location: 'Unknown', capacity: 'Unknown' }; // Jeśli nie uda się pobrać danych pokoju
+        }
+      };
+  
+      const mappedReservations = await Promise.all(
+        data.map(async (item) => {
+          const roomDetails = await fetchRoomDetails(item.room_id);
+          return {
+            reservationId: item.reservation_id,
+            name: item.title,
+            roomId: item.room_id,
+            time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
+            date: moment(item.start_time).format('YYYY-MM-DD'),
+            hasProjector: item.has_projector,
+            hasWhiteboard: item.has_whiteboard,
+            imageUrl: item.link_to_photo,
+            reservationUserId: item.user_id,
+            location: roomDetails.location,
+            capacity: roomDetails.capacity,
+            roomName: roomDetails.name,
+          };
+        })
+      );
+  
+      const filteredReservations = mappedReservations.filter((reservation) =>
+        moment(reservation.date).isSameOrAfter(moment(), 'day')
+      );
+  
+      setReservations(filteredReservations);
     } catch (error) {
       console.error('Error fetching reservations:', error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const groupReservationsByDate = (reservations) => {
     const groupedReservations = {};
@@ -105,12 +145,18 @@ const ReservationsTab = () => {
 
     return (
       <ReservationCard
+        reservationId={item.reservationId}
+        room={item.room}
+        roomId={item.roomId}
         title={item.name}
         time={item.time}
         hasProjector={item.hasProjector}
         hasWhiteboard={item.hasWhiteboard}
+        location={item.location}
+        capacity={item.capacity}
+        roomName={item.roomName}
         imageUrl={item.imageUrl}
-        onCancel={item.reservation_user_id === userId ? () => handleCancel(item.id) : null}
+        onCancel={item.reservationUserId === userId ? () => handleCancel(item.id) : null}
       />
     );
   };

@@ -1,17 +1,26 @@
-import React from 'react'; 
+import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
-const ReservationCard = ({ title, time, hasProjector, hasWhiteboard, imageUrl, onCancel }) => {
-  console.log(imageUrl);
+const ReservationCard = ({ reservationId, roomId, title, time, hasProjector, hasWhiteboard, location, capacity, roomName }) => {
+  const navigation = useNavigation();
+
+  const handleCardPress = () => {
+    navigation.navigate('ReservationDetailsScreen', { reservationId, roomId, hasWhiteboard, hasProjector, title, time, location, capacity, roomName });
+  };
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={handleCardPress} style={styles.card}>
       <View style={styles.imageContainer}>
         <Image source={require("../assets/19.jpg")} style={styles.image} />
       </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{title}</Text>
-        
+        <View style={styles.infoContainer}>
+          <Ionicons name="location-outline" size={15} color="#000000" style={styles.icon} />
+          <Text style={styles.info}>{location}</Text>
+        </View>
         <View style={styles.infoContainer}>
           <Ionicons name="time-outline" size={15} color="#000000" style={styles.icon} />
           <Text style={styles.info}>{time}</Text>
@@ -24,14 +33,8 @@ const ReservationCard = ({ title, time, hasProjector, hasWhiteboard, imageUrl, o
             <Text style={styles.noEquipmentText}>No Equipment</Text>
           )}
         </View>
-        <Text style={styles.seeMore}>See more...</Text>
       </View>
-      {onCancel && (
-        <TouchableOpacity onPress={onCancel} style={styles.cancelButton}>
-          <Text style={styles.cancelButtonText}>Cancel</Text>
-        </TouchableOpacity>
-      )}
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -69,6 +72,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Medium',
   },
   infoContainer: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontFamily: 'Lato-Regular',
     flexDirection: 'row',
     alignItems: 'center',
   },
