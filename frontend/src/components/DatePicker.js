@@ -26,7 +26,7 @@ const DatePicker = ({ selectedDate, onDateChange }) => {
 
   return (
     <TouchableOpacity
-      style={[globalStyles.pickerContainer, { width: 180 }]}
+      style={[globalStyles.pickerContainer, { width: '85%' }]}
       onPress={() => setShowPicker(true)}
     >
       <Text style={globalStyles.pickerValue}>{selectedDate || 'DD/MM/YYYY'}</Text>

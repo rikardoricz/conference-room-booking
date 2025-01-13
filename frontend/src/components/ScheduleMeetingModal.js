@@ -133,7 +133,7 @@ const ScheduleMeetingModal = ({ visible, onClose }) => {
                       minValue={1}
                       maxValue={30}
                       placeholder="1-30"
-                      style={{ width: '100%' }}
+                      style={{ width: '85%' }}
                     /> 
                   </View>
                 </SectionWrapper>
@@ -242,10 +242,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   timePickerRow: {
-    paddingHorizontal: 16,
+    //paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: '90%',
     marginVertical: 8,
     marginHorizontal: 8,
   },
