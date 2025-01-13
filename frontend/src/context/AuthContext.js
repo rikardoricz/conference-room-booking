@@ -100,6 +100,7 @@ export const AuthProvider = ({ children }) => {
         console.log('Token refreshed:', data);
         await SecureStore.setItemAsync('userToken', data.access_token);
         setUserToken(data.access_token);
+        setUserId(data.user_id);
 
         const decodedAccessToken = jwtDecode(data.access_token);
         scheduleTokenRefresh(storedRefreshToken, decodedAccessToken.exp * 1000);
