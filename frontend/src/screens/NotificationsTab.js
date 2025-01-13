@@ -43,7 +43,7 @@ const NotificationsTab = () => {
         setNotifications(data);
       }
     } catch (error) {
-      console.error('Notifications fetch error:', error.message);
+      // console.error('Notifications fetch error:', error.message);
       Alert.alert('Error', 'Failed to fetch notifications. Please try again.');
     } finally {
       setLoading(false);
@@ -76,7 +76,7 @@ const NotificationsTab = () => {
       );
       console.log('Notification status updated:', updatedNotification);
     } catch (error) {
-      console.error('Error updating notification status:', error.message);
+      // console.error('Error updating notification status:', error.message);
       Alert.alert('Error', 'Failed to update notification status. Please try again.');
     }
   };
@@ -156,7 +156,7 @@ const NotificationsTab = () => {
 
       console.log('All non-archived notifications marked as read');
     } catch (error) {
-      console.error('Error marking all notifications as read:', error.message);
+      // console.error('Error marking all notifications as read:', error.message);
       Alert.alert('Error', 'Failed to mark all notifications as read. Please try again.');
     }
   };
@@ -181,7 +181,6 @@ const NotificationsTab = () => {
         showMarkAllRead={true}
         onMarkAllRead={handleMarkAllRead}
       />
-      {notifications.length > 0 ? (
         <FlatList
           data={[...notifications]
             .filter(notification => notification.status !== 'archived')
@@ -197,10 +196,10 @@ const NotificationsTab = () => {
               onRefresh={onRefresh}
             /> 
           }
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No notifications found.</Text>
+          }
         />
-      ) : (
-        <Text style={styles.emptyText}>No notifications found.</Text>
-      )}
     </SafeAreaView>
   );
 };
