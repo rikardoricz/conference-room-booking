@@ -5,7 +5,7 @@ from app.models.user import User
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 def admin_routes(app,db):
-    @app.route('/add-room', methods=['GET','POST'])
+    @app.route('/add-room', methods=['POST'])
     @jwt_required()
     def add_room():
         current_user = get_jwt_identity()
@@ -40,7 +40,39 @@ def admin_routes(app,db):
                 msg=f'Succesfully added room, {new_room}'
             )
 
-        return 'Add room page'
+     @app.route('/delete-room', methods=['DELETE'])
+    @jwt_required()
+    def add_room():
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first() 
+        
+        if user.role != 'admin':
+            return jsonify(
+                msg='Authorization Error! Invalid role'
+            ), 409
+        
+        if not request.is_json:
+            return jsonify(
+                msg="Missing json in request"
+            ), 400
+        
+        data = request.get_json()
+
+        id=data.get('room_id')
+
+        if not id:
+            return jsonify(
+                msg="No room-id provided"
+            ),400
+        
+        room = Room.query.filter_by(room_id=id).first()
+
+        db.session.delete(room)
+        db.session.commit()
+        return jsonify(
+            msg=f"Reservation with ID {id} has been deleted."
+        )
+    
     @app.route('/edit-role', methods=['POST'])
     @jwt_required()
     def edit_user():
