@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginBottom: 0,
     marginHorizontal: 10,
-    fontFamily: 'Lato-Medium',
+    fontFamily: 'Lato_400Regular',
   },
   infoContainer: {
     flexDirection: 'row',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 14,
     color: '#000000',
-    fontFamily: 'Lato-Regular',
+    fontFamily: 'Lato_400Regular',
   },
   cancelButton: {
     position: 'absolute',
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
-    fontFamily: 'Lato-Regular',
+    fontFamily: 'Lato_400Regular',
     fontSize: 14,
   },
 });

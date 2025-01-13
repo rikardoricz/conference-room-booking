@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: 'bold',
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato_700Bold',
   },
 });
 
