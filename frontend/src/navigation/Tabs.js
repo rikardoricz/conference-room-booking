@@ -2,7 +2,6 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import HomeTab from '../screens/HomeTab';
 import MeetingsTab from '../screens/MeetingsTab';
 import ReservationsTab from '../screens/ReservationsTab';
 import NotificationsTab from '../screens/NotificationsTab';
@@ -13,7 +12,7 @@ const Tab = createBottomTabNavigator();
 const Tabs = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Reservations"
       screenOptions={{
         headerShown: false,
         animation: 'shift',
@@ -21,15 +20,6 @@ const Tabs = () => {
         tabBarInactiveTintColor: '#9C9C9C',
       }}
     >
-      <Tab.Screen
-        name="Home"
-        component={HomeTab}
-        options={{ title: 'Home' ,
-        tabBarIcon:({size, color})=>(
-            <Icon name="home" size={size} color={color} />
-          ),
-        }}
-      />
       <Tab.Screen
         name="Reservations"
         component={ReservationsTab}
