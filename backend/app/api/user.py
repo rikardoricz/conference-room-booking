@@ -117,7 +117,7 @@ def user_routes(app,db):
         user = User.query.filter_by(username=current_user).first()
         user_id = user.user_id
 
-        notifications = Notification.query.filter_by(user_id=user_id).all()
+        notifications = Notification.query.filter(Notification.status != 'unsent').filter_by(user_id=user_id).all()
 
         notifications_list = [{ "notification_id": notification.notification_id,
                                 "user_id": notification.user_id,
