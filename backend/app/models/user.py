@@ -28,9 +28,6 @@ class User(db.Model):
     def edit_password(self, password):
         self.password_hashed = generate_password_hash(password)
 
-    def get_id(self):
-        return self.user_id
-
     def __repr__(self):
         return f'<User: {self.username}>'
     
