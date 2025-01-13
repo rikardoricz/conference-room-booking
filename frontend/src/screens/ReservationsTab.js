@@ -22,46 +22,47 @@ const ReservationsTab = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchReservations = async () => {
-      try {
-        const response = await fetch('http://10.0.2.2:5000/reservations', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userToken}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch reservations');
-        }
-
-        const data = await response.json();
-
-        const mappedReservations = data.map((item) => ({
-          id: item.reservation_id,
-          name: item.title,
-          time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
-          date: moment(item.start_time).format('YYYY-MM-DD'),
-          hasProjector: item.has_projector,
-          hasWhiteboard: item.has_whiteboard,
-          imageUrl: item.link_to_photo,
-          reservation_user_id: item.user_id,
-        }))
-        .filter((reservation) => moment(reservation.date).isSameOrAfter(moment(), 'day'));
-
-        setReservations(mappedReservations);
-      } catch (error) {
-        console.error('Error fetching reservations:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchReservations();
   }, [userToken]);
+
+  const fetchReservations = async () => {
+    try {
+      const response = await fetch('http://10.0.2.2:5000/reservations', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch reservations');
+      }
+
+      const data = await response.json();
+
+      const mappedReservations = data.map((item) => ({
+        id: item.reservation_id,
+        name: item.title,
+        time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
+        date: moment(item.start_time).format('YYYY-MM-DD'),
+        hasProjector: item.has_projector,
+        hasWhiteboard: item.has_whiteboard,
+        imageUrl: item.link_to_photo,
+        reservation_user_id: item.user_id,
+      }))
+      .filter((reservation) => moment(reservation.date).isSameOrAfter(moment(), 'day'));
+
+      setReservations(mappedReservations);
+    } catch (error) {
+      console.error('Error fetching reservations:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const groupReservationsByDate = (reservations) => {
     const groupedReservations = {};
@@ -159,6 +160,13 @@ const ReservationsTab = () => {
   const handleSchedulePress = () => {
     setModalVisible(true);
   };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchReservations();
+    setRefreshing(false);
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>

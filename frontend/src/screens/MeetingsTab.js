@@ -8,6 +8,7 @@ import {
   Text,
   Alert,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -23,44 +24,45 @@ const MeetingsTab = () => {
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchMeetings = async () => {
-      try {
-        const response = await fetch('http://10.0.2.2:5000/meetings', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userToken}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch meetings');
-        }
-
-        const data = await response.json();
-
-        const mappedMeetings = data.map((item) => ({
-          id: item.reservation_id,
-          name: item.title, 
-          time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
-          location: `Room ${item.room_id}`,
-          date: moment(item.start_time).format('YYYY-MM-DD'),
-          reservation_user_id: item.user_id,
-        }))
-        .filter((meeting) => moment(meeting.date).isSameOrAfter(moment(), 'day'));
-
-        setMeetings(mappedMeetings);
-      } catch (error) {
-        console.error('Error fetching meetings:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchMeetings();
   }, [userToken]);
+
+  const fetchMeetings = async () => {
+    try {
+      const response = await fetch('http://10.0.2.2:5000/meetings', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch meetings');
+      }
+
+      const data = await response.json();
+
+      const mappedMeetings = data.map((item) => ({
+        id: item.reservation_id,
+        name: item.title, 
+        time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
+        location: `Room ${item.room_id}`,
+        date: moment(item.start_time).format('YYYY-MM-DD'),
+        reservation_user_id: item.user_id,
+      }))
+      .filter((meeting) => moment(meeting.date).isSameOrAfter(moment(), 'day'));
+
+      setMeetings(mappedMeetings);
+    } catch (error) {
+      console.error('Error fetching meetings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const groupMeetingsByDate = (meetings) => {
     const groupedMeetings = {};
@@ -158,6 +160,12 @@ const MeetingsTab = () => {
     setModalVisible(true);
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchMeetings();
+    setRefreshing(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Meetings" />
@@ -166,6 +174,12 @@ const MeetingsTab = () => {
         data={flattenedMeetings}
         keyExtractor={(item, index) => `${item.type}-${item.date || item.id}-${index}`}
         renderItem={renderMeetingItem}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          /> 
+        }
       />
 
       <TouchableOpacity onPress={handleSchedulePress} style={styles.addButton}>
