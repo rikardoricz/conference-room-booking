@@ -8,6 +8,7 @@ import {
   Text,
   Alert,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -176,6 +177,12 @@ const ReservationsTab = () => {
         data={flattenedReservations}
         keyExtractor={(item, index) => `${item.type}-${item.date || item.id}-${index}`}
         renderItem={renderReservationItem}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          /> 
+        }
       />
 
       <TouchableOpacity onPress={handleSchedulePress} style={styles.addButton}>
