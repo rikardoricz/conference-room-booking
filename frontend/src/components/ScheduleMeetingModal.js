@@ -133,6 +133,7 @@ const ScheduleMeetingModal = ({ visible, onClose }) => {
                       minValue={1}
                       maxValue={30}
                       placeholder="1-30"
+                      style={{ width: '100%' }}
                     /> 
                   </View>
                 </SectionWrapper>

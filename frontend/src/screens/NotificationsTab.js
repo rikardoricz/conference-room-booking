@@ -39,7 +39,9 @@ const NotificationsTab = () => {
       }
 
       const data = await response.json();
-      if (JSON.stringify(data) !== JSON.stringify(notifications)) {
+      if (data.length === 0) {
+        Alert.alert('No notifications found', 'You have no new notifications.');
+      } else if (JSON.stringify(data) !== JSON.stringify(notifications)) {
         setNotifications(data);
       }
     } catch (error) {

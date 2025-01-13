@@ -5219,6 +5219,11 @@ react-native-calendars@^1.1307.0:
   optionalDependencies:
     moment "^2.29.4"
 
+react-native-dropdown-picker@^5.4.6:
+  version "5.4.6"
+  resolved "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.6.tgz"
+  integrity sha512-T1XBHbE++M6aRU3wFYw3MvcOuabhWZ29RK/Ivdls2r1ZkZ62iEBZknLUPeVLMX3x6iUxj4Zgr3X2DGlEGXeHsA==
+
 react-native-multiple-select@^0.5.12:
   version "0.5.12"
   resolved "https://registry.npmjs.org/react-native-multiple-select/-/react-native-multiple-select-0.5.12.tgz"

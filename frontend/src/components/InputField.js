@@ -9,7 +9,8 @@ const InputField = ({
   minValue, 
   maxValue, 
   maxLength,
-  placeholder
+  placeholder,
+  style
 }) => {
   const handleInputChange = (text) => {
     if (keyboardType === 'numeric') {
@@ -28,7 +29,7 @@ const InputField = ({
   };
 
   return (
-    <View style={[globalStyles.pickerContainer, { width: 100 }]}>
+    <View style={[globalStyles.pickerContainer, style]}>
       <TextInput
         style={globalStyles.pickerValue}
         value={value?.toString() || ''}
