@@ -292,8 +292,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: width,         // Ustawienie szerokości na szerokość ekranu
-    height: width,        // Ustawienie wysokości na szerokość ekranu
+    width: width,
+    height: width,
     borderRadius: 8,
   },
   detailsContainer: {
@@ -303,15 +303,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    marginLeft: 10,
   },
   description: {
     marginBottom: 10,
+    marginLeft: 10,
   },
   equipmentList: {
     marginBottom: 5,
   },
   equipmentItem: {
     marginBottom: 5,
+    marginLeft: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
