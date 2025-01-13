@@ -142,6 +142,26 @@ const NotificationsTab = () => {
     </Animatable.View>
   );
 
+  const handleMarkAllRead = async () => {
+    try {
+      for (const notification of notifications) {
+        if (notification.status !== 'archived') {
+          await handleUpdateStatus(notification.notification_id, 'read');
+        }
+      }
+
+      setNotifications(prevNotifications => prevNotifications.map(notification =>
+        notification.status !== 'archived' ? ({ ...notification, status: 'read' }) : notification
+      ));
+
+      console.log('All non-archived notifications marked as read');
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error.message);
+      Alert.alert('Error', 'Failed to mark all notifications as read. Please try again.');
+    }
+  };
+
+
   useEffect(() => {
     fetchNotifications();
   }, []);
@@ -156,10 +176,17 @@ const NotificationsTab = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Notifications" />
+      <Header 
+        title="Notifications" 
+        showMarkAllRead={true}
+        onMarkAllRead={handleMarkAllRead}
+      />
       {notifications.length > 0 ? (
         <FlatList
-          data={notifications}
+          data={[...notifications]
+            .filter(notification => notification.status !== 'archived')
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)
+          )}
           keyExtractor={(item, index) =>
             item.notification_id?.toString() || index.toString()
           }

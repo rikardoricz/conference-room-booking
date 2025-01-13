@@ -12,17 +12,16 @@ const ReservationCard = ({ title, time, location, hasProjector, hasWhiteboard, i
         <Text style={styles.title}>{title}</Text>
         
         <View style={styles.infoContainer}>
-            <Ionicons name="time-outline" size={16} color="#000000" style={styles.icon} />
+            <Ionicons name="time-outline" size={15} color="#000000" style={styles.icon} />
             <Text style={styles.info}>{time}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-            <Ionicons name="location-outline" size={16} color="#000000" style={styles.icon} />
-            <Text style={styles.info}>{location}</Text>
         </View>
 
         <View style={styles.iconsContainer}>
-          {hasProjector && <Ionicons name="videocam-outline" size={16} color="#000" />}
-          {hasWhiteboard && <Ionicons name="easel-outline" size={16} color="#000" />}
+          {hasProjector && <Ionicons name="videocam-outline" size={15} color="#000000" />}
+          {hasWhiteboard && <Ionicons name="easel-outline" size={15} color="#000000" />}
+          {!hasProjector && !hasWhiteboard && (
+            <Text style={styles.noEquipmentText}>No Equipment</Text>
+          )}
         </View>
         <Text style={styles.seeMore}>See more...</Text>
       </View>
@@ -85,10 +84,8 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: 'row',
-    marginTop: 5,
   },
   seeMore: {
-    marginTop: 5,
     color: '#000000',
     opacity: 0.5,
   },

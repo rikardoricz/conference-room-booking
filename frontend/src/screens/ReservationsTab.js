@@ -45,7 +45,6 @@ const ReservationsTab = () => {
           id: item.reservation_id,
           name: item.title,
           time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
-          location: `Room ${item.room_id}`,
           date: moment(item.start_time).format('YYYY-MM-DD'),
           hasProjector: item.has_projector,
           hasWhiteboard: item.has_whiteboard,
@@ -107,7 +106,6 @@ const ReservationsTab = () => {
       <ReservationCard
         title={item.name}
         time={item.time}
-        location={item.location}
         hasProjector={item.hasProjector}
         hasWhiteboard={item.hasWhiteboard}
         imageUrl={item.imageUrl}
