@@ -22,8 +22,34 @@ const MeetingsTab = () => {
   const { userToken } = useContext(AuthContext);
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const loggedUserId = 1; // ID zalogowanego użytkownika (dostosuj do swojego ID)
   const [modalVisible, setModalVisible] = useState(false);
+  const [loggedUserId, setLoggedUserId] = useState(null); 
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('http://10.0.2.2:5000/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user profile');
+        }
+
+        const userData = await response.json();
+        setLoggedUserId(userData.user_id); 
+
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [userToken]);
 
   useEffect(() => {
     const fetchMeetings = async () => {
@@ -44,7 +70,7 @@ const MeetingsTab = () => {
 
         const mappedMeetings = data.map((item) => ({
           id: item.reservation_id,
-          name: item.title, //Standard lecture do usunięcia jak title będzie działało 
+          name: item.title, 
           time: `${moment(item.start_time).format('HH:mm')} - ${moment(item.end_time).format('HH:mm')}`,
           location: `Room ${item.room_id}`,
           date: moment(item.start_time).format('YYYY-MM-DD'),
