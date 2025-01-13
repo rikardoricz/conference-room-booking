@@ -102,6 +102,7 @@ def user_routes(app,db):
                 "username": user.username,
                 "email": user.email,
                 "role": user.role,
+                "user_id": user.user_id,
                 "created_at": user.created_at
             }
             return jsonify(user_data)
