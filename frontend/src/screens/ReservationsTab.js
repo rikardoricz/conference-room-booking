@@ -21,8 +21,30 @@ const ReservationsTab = () => {
   const { userToken } = useContext(AuthContext);
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const loggedUserId = 1; // ID zalogowanego użytkownika (dostosuj do swojego ID)
   const [modalVisible, setModalVisible] = useState(false);
+  const [loggedUserId, setLoggedUserId] = useState(null); 
+  
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('http://10.0.2.2:5000/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch user profile');
+        }
+        const userData = await response.json();
+        setLoggedUserId(userData.user_id); 
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+    fetchUserProfile();
+  }, [userToken]);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -99,7 +121,7 @@ const ReservationsTab = () => {
 
   const renderReservationItem = ({ item }) => {
     if (item.type === 'header') {
-      return <MeetingDate date={new Date(item.date)} />; // Zamień na swój komponent do wyświetlania daty
+      return <MeetingDate date={new Date(item.date)} />; 
     }
 
     return (
