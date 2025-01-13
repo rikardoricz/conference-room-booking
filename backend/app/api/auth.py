@@ -39,7 +39,8 @@ def auth_routes(app,db):
                 return jsonify(
                     message=f"Login Successful, {user}",
                     access_token=access_token,
-                    refresh_token=refresh_token
+                    refresh_token=refresh_token,
+                    user_id=user.user_id
                 ) 
             else:
                 return jsonify(
