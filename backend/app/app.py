@@ -32,4 +32,7 @@ def create_app():
 
     migrate = Migrate(app,db)
 
+    from app.utils.scheduler import start_scheduler
+    start_scheduler(app)
+
     return app

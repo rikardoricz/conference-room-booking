@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from app.models.notification import Notification
 from app.models.reservation import Reservation
 from app.models.invitiations import Invitation
+from app.app import db
 
 def create_notifications(reservation:Reservation):
     now = datetime.utcnow()
@@ -58,6 +59,7 @@ def create_notifications(reservation:Reservation):
 # TODO DODAC TO tam gdzie zmienia sie status
 def send_notifications():
     now = datetime.utcnow()
+    print("send notification")
 
     # fetch notifications that have to be sent now or are late
     notifications = Notification.query.filter(
