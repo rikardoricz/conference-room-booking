@@ -4,6 +4,7 @@ from app.models.user import User
 from app.models.reservation import Reservation
 from app.models.notification import Notification
 from app.models.invitiations import Invitation
+from app.services.notification_service import create_notifications
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 
@@ -122,7 +123,6 @@ def user_routes(app,db):
                                 "user_id": notification.user_id,
                                 "reservation_id": notification.reservation_id,
                                 "title": notification.title,
-                                "msg": notification.message,
                                 "created_at": notification.created_at.isoformat(),
                                 "updated_at": notification.updated_at.isoformat() if notification.updated_at else None,
                                 "status": notification.status
@@ -219,6 +219,8 @@ def user_routes(app,db):
 
         db.session.commit()
 
+        #TODO TUTAJ powiadomienia
+        create_notifications(new_reservation)
 
         return jsonify(
                     msg=f"Reservation Successful, {new_reservation}. Invitations sent to {len(attendees)} attendees."
