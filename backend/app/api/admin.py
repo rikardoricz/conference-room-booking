@@ -41,3 +41,43 @@ def admin_routes(app,db):
             )
 
         return 'Add room page'
+    @app.route('/edit-user', methods=['POST'])
+    @jwt_required()
+    def edit_user():
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(username=current_user).first() 
+        
+        if user.role != 'admin':
+            return jsonify(
+                msg='Authorization Error! Invalid role'
+            ), 403
+        
+        if not request.is_json:
+            return jsonify(
+                msg="Missing json in request"
+            ), 400
+
+        data = request.get_json()
+        username=data.get('username')
+        role=data.get('role','user')
+        
+        if not username:
+            return jsonify(
+                msg='No username provided!'
+            ), 409
+
+        target_user = User.query.filter_by(username=username).first()
+
+        if not target_user:
+            return jsonify(
+                msg='User not found!'
+            ), 404
+
+        target_user.role = role
+        db.session.commit() 
+
+        return jsonify(
+            msg='User role updated successfully!'
+        ), 200
+
+        
