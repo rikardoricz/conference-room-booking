@@ -13,7 +13,7 @@ def create_notifications(reservation:Reservation):
         notification = Notification( 
             user_id=reservation.user_id,
             reservation_id=reservation.reservation_id,
-            message=f"Meeting '{reservation.title}' is tomorrow at {reservation.start_time}.",
+            title=f"Meeting '{reservation.title}' is tomorrow at {reservation.start_time}.",
             notification_time=notification_time_day 
         )
         db.session.add(notification)
@@ -24,7 +24,7 @@ def create_notifications(reservation:Reservation):
         notification = Notification(
             user_id= reservation.user_id,
             reservation_id=reservation.reservation_id,
-            message=f"Meeting '{reservation.title}' starts in 1 hour at {reservation.start_time}.",
+            title=f"Meeting '{reservation.title}' starts in 1 hour at {reservation.start_time}.",
             notification_time=notification_time_hour
         )
         db.session.add(notification)
@@ -38,7 +38,7 @@ def create_notifications(reservation:Reservation):
             notification = Notification( 
                 user_id=invitation.user_id,
                 reservation_id=reservation.reservation_id,
-                message=f"Meeting '{reservation.title}' is tomorrow at {reservation.start_time}.",
+                title=f"Meeting '{reservation.title}' is tomorrow at {reservation.start_time}.",
                 notification_time=notification_time_day 
             )
             db.session.add(notification)
@@ -49,7 +49,7 @@ def create_notifications(reservation:Reservation):
             notification = Notification(
                 user_id= invitation.user_id,
                 reservation_id=reservation.reservation_id,
-                message=f"Meeting '{reservation.title}' starts in 1 hour at {reservation.start_time}.",
+                title=f"Meeting '{reservation.title}' starts in 1 hour at {reservation.start_time}.",
                 notification_time=notification_time_hour
             )
             db.session.add(notification)

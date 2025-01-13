@@ -189,7 +189,7 @@ def user_routes(app,db):
 
         if start_time >= end_time:
             return jsonify({"msg": "startTime must be earlier than endTime"}), 400
-        room = Reservation.query.filter_by(room_id=room_id).first()
+        room = Room.query.filter_by(room_id=room_id).first()
 
         if not room:
             return jsonify(
@@ -219,11 +219,10 @@ def user_routes(app,db):
 
         db.session.commit()
 
-        #TODO TUTAJ powiadomienia
         create_notifications(new_reservation)
 
         return jsonify(
-                    msg=f"Reservation Successful, {new_reservation}. Invitations sent to {len(attendees)} attendees."
+                    msg=f"Reservation Successful, reservation id: {new_reservation.reservation_id}. Invitations sent to {len(attendees)} attendees."
                 )
     
     @app.route('/meetings', methods=['GET'])
