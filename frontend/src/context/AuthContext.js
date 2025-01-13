@@ -8,6 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const login = async (username, password) => {
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children }) => {
         await SecureStore.setItemAsync('refreshToken', data.refresh_token);
         setUserToken(data.access_token);
         setRefreshToken(data.refresh_token);
+        setUserId(data.user_id);
 
         const decodedAccessToken = jwtDecode(data.access_token);
         scheduleTokenRefresh(data.refresh_token, decodedAccessToken.exp * 1000);
@@ -155,7 +157,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userToken, login, logout, signup, loading }}>
+    <AuthContext.Provider value={{ userToken, login, logout, signup, userId, loading }}>
       {children}
     </AuthContext.Provider>
   );
