@@ -7,8 +7,7 @@ const ReservationCard = ({ title, time, hasProjector, hasWhiteboard, imageUrl, o
   return (
     <View style={styles.card}>
       <View style={styles.imageContainer}>
-        {/* Zmieniono sposób pobierania obrazu na zewnętrzny link */}
-        <Image source={require("../assets/3.jpg")} style={styles.image} />
+        <Image source={require("../assets/19.jpg")} style={styles.image} />
       </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{title}</Text>

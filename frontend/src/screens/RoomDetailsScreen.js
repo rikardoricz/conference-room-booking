@@ -17,6 +17,7 @@ import MultiSelect from 'react-native-multiple-select';
 import { AuthContext } from '../context/AuthContext'
 import Header from '../components/Header';
 import MyButton from '../components/MyButton';
+import { Dimensions} from 'react-native';
 
 const RoomDetailsScreen = ({ route, navigation }) => {
   const { userToken } = useContext(AuthContext);
@@ -154,7 +155,7 @@ const RoomDetailsScreen = ({ route, navigation }) => {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : room ? (
         <>
-          <Image source={{ uri: room.photo }} style={styles.roomImage} />
+          <Image source={require("../assets/19.jpg")} style={styles.image} />
           <View style={styles.detailsContainer}>
             <Text style={styles.sectionTitle}>DESCRIPTION</Text>
             <Text style={styles.description}>{room.name}</Text>
@@ -284,14 +285,16 @@ const RoomDetailsScreen = ({ route, navigation }) => {
   );
 };
 
+const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
-  roomImage: {
-    width: '100%',
-    height: 200,
-    marginBottom: 20,
+  image: {
+    width: width,         // Ustawienie szerokości na szerokość ekranu
+    height: width,        // Ustawienie wysokości na szerokość ekranu
+    borderRadius: 8,
   },
   detailsContainer: {
     marginTop: 20,
