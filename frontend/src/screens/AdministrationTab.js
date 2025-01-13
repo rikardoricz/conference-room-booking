@@ -7,25 +7,24 @@ import {
 import Header from '../components/Header';
 import MyButton from '../components/MyButton';
 import AddRoomModal from '../components/AddRoomModal';
+import ManageRoomsModal from '../components/ManageRoomsModal';
 
 
 const AdministrationTab = ({ navigation }) => {
   const [isAddRoomModalVisible, setAddRoomModalVisible] = useState(false);
+  const [isManageRoomsModalVisible, setManageRoomsModalVisible] = useState(false);
+
 
 
   const handleManageRooms = () => {
     console.log('Manage Rooms button pressed');
+    setManageRoomsModalVisible(true);
     // Add functionality here
   };
 
   const handleAddRoom = () => {
     console.log('Add Room button pressed');
     setAddRoomModalVisible(true); //
-    // Add functionality here
-  };
-
-  const handleEditRemoveRoom = () => {
-    console.log('Edit/Remove Room button pressed');
     // Add functionality here
   };
 
@@ -44,26 +43,20 @@ const AdministrationTab = ({ navigation }) => {
     // Add functionality here
   };
 
-  const handleAddUser = () => {
-    console.log('Add User button pressed');
-    // Add functionality here
-  };
-
   const handleResetPassword = () => {
     console.log('Reset Password button pressed');
     // Add functionality here
   };
 
   const handleCloseAddRoomModal = () => {
-    setAddRoomModalVisible(false); // Hide the modal
+    setAddRoomModalVisible(false);
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Administration" />
       <View style={styles.buttonContainer}>
-        {/* Buttons */}
+        {/* buttons */}
         <View style={styles.buttonWrapper}>
         <MyButton
           title="Add Room"
@@ -112,22 +105,16 @@ const AdministrationTab = ({ navigation }) => {
           onPress={handleManageUsers}
         />
         </View>
-        <View style={styles.buttonWrapper}>
-        <MyButton
-          title="Add User"
-          backgroundColor="#CCE6F4"
-          borderColor="#CCE6F4"
-          textColor="#000"
-          height={40}
-          borderRadius={10}
-          fontSize={16}
-          onPress={handleAddUser}
-        />
       </View>
-      </View>
+
+      {/* modals */}
       <AddRoomModal
-        visible={isAddRoomModalVisible} // Modal visibility state
-        onClose={handleCloseAddRoomModal} // Close the modal
+        visible={isAddRoomModalVisible}
+        onClose={handleCloseAddRoomModal}
+      />
+      <ManageRoomsModal
+        visible={isManageRoomsModalVisible}
+        onClose={() => setManageRoomsModalVisible(false)}
       />
     </SafeAreaView>
   );
@@ -140,7 +127,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    paddingHorizontal: 8,
+    paddingHorizontal: 16,
   },
   buttonWrapper: {
     marginVertical: 8,
