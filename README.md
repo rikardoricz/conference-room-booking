@@ -4,6 +4,7 @@
 
 - Python 3.12
 - npm
+- docker compose
 
 ## Setup
 
@@ -12,17 +13,57 @@ git clone github.com/rikardoricz/conference-room-booking
 cd conference-room-booking
 ```
 
+### ENV variables
+
+Create `.env` files with content given below. Change values to suit your needs.
+
+`./backend/.env`:
+
+```
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@postgres-db:5432/dbname'
+JWT_SECRET_KEY = 'your_jwt_secret_key'
+SECRET_KEY = 'secret_key'
+POSTGRES_DB = 'dbname'
+POSTGRES_USER = 'postgres'
+POSTGRES_PASSWORD = 'postgres'
+PGADMIN_EMAIL: 'admin@example.com'
+PGADMIN_PASSWORD: 'admin'
+```
+
+`./backend/app/.env`:
+
+```
+SQLALCHEMY_DATABASE_URI="postgresql://postgres:postgres@postgres-db:5432/dbname"
+SECRET_KEY="secret_key"
+JWT_SECRET_KEY="your_jwt_secret_key"
+
+```
+
 ### Backend
 
 ```shell
 cd backend
-python3 -m venv .venv
-. .venv/bin/activate (For Windows: .venv\Scripts\activate)
-pip install -r requirements.txt
-flask run
+docker compose up -d
 ```
 
 ### Frontend
+
+In `./frontend/src/config/apiConfig.js` file update ip addres of server that backend will run on:
+```
+export const API_BASE_URL = 'http://<server-ip-address>:5000'; 
+```
+
+Create free account on [expo.dev](https://expo.dev). Build the app using expo:
+```
+npm install eas-cli
+npx eas login
+npx eas build --platform android --profile preview
+```
+Then use the provided link to download `.apk` file, copy it on your mobile device and install.
+
+ <!-- Download `conf-room-booking.apk` form Releases and run on your mobile device. -->
+
+_Alternatively you can run app on emulator:_
 
 ```shell
 cd frontend
@@ -30,40 +71,3 @@ npm install
 npx expo start
 ```
 
-### Database
-
-Create `.env` file containing env variables used by `compose.yml`:
-
-```yaml
-services:
-  postgres:
-    image: postgres
-    container_name: postgres_db
-    ports:
-      - 5432:5432
-    env_file: .env
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_conf_room
-    env_file: .env
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-    ports:
-      - 5050:80
-    depends_on:
-      - postgres
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-    driver: local
-```
