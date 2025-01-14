@@ -15,4 +15,4 @@ ENV FLASK_ENV=production
 
 EXPOSE 5000
 
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["sh", "-c", "rm -rf migrations && flask db init && flask db migrate && flask db upgrade && flask run --host=0.0.0.0"]
