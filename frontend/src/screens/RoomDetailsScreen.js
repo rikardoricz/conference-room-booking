@@ -18,6 +18,7 @@ import { AuthContext } from '../context/AuthContext'
 import Header from '../components/Header';
 import MyButton from '../components/MyButton';
 import { Dimensions} from 'react-native';
+import { API_BASE_URL } from '../config/apiConfig';
 
 const RoomDetailsScreen = ({ route, navigation }) => {
   const { userToken } = useContext(AuthContext);
@@ -36,7 +37,7 @@ const RoomDetailsScreen = ({ route, navigation }) => {
 
   const fetchRoomDetails = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:5000/rooms/${roomId}`, {
+      const response = await fetch(`${API_BASE_URL}/rooms/${roomId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ const RoomDetailsScreen = ({ route, navigation }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:5000/users', { 
+      const response = await fetch(`l{API_BASE_URL}/users`, { 
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${userToken}`,
@@ -116,7 +117,7 @@ const RoomDetailsScreen = ({ route, navigation }) => {
       const [day, month, year] = date.split('/');
       const formattedDate = `${year}-${month}-${day}`;
 
-      const response = await fetch(`http://10.0.2.2:5000/reserve`, {
+      const response = await fetch(`${API_BASE_URL}/reserve`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

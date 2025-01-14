@@ -14,6 +14,7 @@ import MyButton from './MyButton';
 import InputField from './InputField';
 import EquipmentItem from './EquipmentItem';
 import { AuthContext } from '../context/AuthContext'
+import { API_BASE_URL } from '../config/apiConfig';
 
 const AddRoomModal = ({ visible, onClose }) => {
   const { userToken } = useContext(AuthContext);
@@ -59,7 +60,7 @@ const AddRoomModal = ({ visible, onClose }) => {
         status,
       };
 
-      const response = await fetch(`http://10.0.2.2:5000/add-room`, {
+      const response = await fetch(`${API_BASE_URL}/add-room`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

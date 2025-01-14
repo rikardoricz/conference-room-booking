@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import MyButton from './MyButton';
 import { AuthContext } from '../context/AuthContext'
+import { API_BASE_URL } from '../config/apiConfig';
 
 const ManageRoomsModal = ({ visible, onClose }) => {
   const { userToken } = useContext(AuthContext);
@@ -20,7 +21,7 @@ const ManageRoomsModal = ({ visible, onClose }) => {
   const fetchRooms = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://10.0.2.2:5000/rooms', {
+      const response = await fetch(`${API_BASE_URL}/rooms`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +45,7 @@ const ManageRoomsModal = ({ visible, onClose }) => {
 
   const handleDeleteRoom = async (roomId) => {
     try {
-      const response = await fetch(`http://10.0.2.2:5000/delete-room`, {
+      const response = await fetch(`${API_BASE_URL}/delete-room`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${userToken}`,

@@ -4,13 +4,18 @@
     "slug": "CRB",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.jpg",
+    "icon": "./src/assets/splash.png",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./src/assets/splash.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.rikardoricz.confereceroombooking",
@@ -19,6 +24,14 @@
     "plugins": [
       "expo-secure-store",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d1b08076-b59e-49d5-bd46-2455dd3731e7"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.rikardoricz.confereceroombooking"
+    }
   }
 }

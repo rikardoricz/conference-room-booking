@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import Header from '../components/Header';
 import MyButton from '../components/MyButton';
 import { Dimensions } from 'react-native';
+import { API_BASE_URL } from '../config/apiConfig';
 
 const ReservationDetailsScreen = ({ route, navigation }) => {
   const { userToken } = useContext(AuthContext);
@@ -18,7 +19,7 @@ const ReservationDetailsScreen = ({ route, navigation }) => {
           text: 'Yes',
           onPress: async () => {
             try {
-              const response = await fetch(`http://10.0.2.2:5000/reservations/${reservationId}`, {
+              const response = await fetch(`${API_BASE_URL}/reservations/${reservationId}`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',

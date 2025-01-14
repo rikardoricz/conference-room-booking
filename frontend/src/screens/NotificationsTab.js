@@ -15,6 +15,7 @@ import MyButton from '../components/MyButton'
 import ActionsContainer from '../components/ActionsContainer'
 import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext'
+import { API_BASE_URL } from '../config/apiConfig';
 
 const NotificationsTab = () => {
   const { userToken } = useContext(AuthContext);
@@ -25,7 +26,7 @@ const NotificationsTab = () => {
   const fetchNotifications = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://10.0.2.2:5000/notifications', {
+      const response = await fetch(`${API_BASE_URL}/notifications`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +55,7 @@ const NotificationsTab = () => {
 
   const handleUpdateStatus = async (notificationId, newStatus) => {
     try {
-      const response = await fetch(`http://10.0.2.2:5000/notifications/${notificationId}`, {
+      const response = await fetch(`${API_BASE_URL}/notifications/${notificationId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

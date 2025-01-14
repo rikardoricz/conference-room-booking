@@ -18,6 +18,7 @@ import MeetingCard from '../components/MeetingCard';
 import ScheduleMeetingModal from '../components/ScheduleMeetingModal';
 import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext';
+import { API_BASE_URL } from '../config/apiConfig';
 
 const MeetingsTab = () => {
   const { userToken, userId } = useContext(AuthContext);
@@ -32,7 +33,7 @@ const MeetingsTab = () => {
 
   const fetchMeetings = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:5000/meetings', {
+      const response = await fetch(`${API_BASE_URL}/meetings`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ const MeetingsTab = () => {
           onPress: async () => {
             try {
               // Usuwanie spotkania z backendu
-              const response = await fetch(`http://10.0.2.2:5000/reservations/${meetingId}`, {
+              const response = await fetch(`${API_BASE_URL}/reservations/${meetingId}`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',

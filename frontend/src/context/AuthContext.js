@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { jwtDecode } from 'jwt-decode';
+import { API_BASE_URL } from '../config/apiConfig';
 
 export const AuthContext = createContext();
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await fetch('http://10.0.2.2:5000/login', { // 10.0.2.2 is a special alias for the host machine from the emulator
+      const response = await fetch(`${API_BASE_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', },
         body: JSON.stringify({ username, password }),
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (username, email, password) => {
     try {
-      const response = await fetch('http://10.0.2.2:5000/register', {
+      const response = await fetch(`${API_BASE_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', },
         body: JSON.stringify({ email, username, password }),
@@ -88,7 +89,7 @@ export const AuthProvider = ({ children }) => {
         //throw new Error('No refresh token found');
       }
 
-      const response = await fetch('http://10.0.2.2:5000/refresh', {
+      const response = await fetch(`${API_BASE_URL}/refresh`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -17,6 +17,7 @@ import ReservationCard from '../components/ReservationCard';
 import ScheduleMeetingModal from '../components/ScheduleMeetingModal';
 import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext';
+import { API_BASE_URL } from '../config/apiConfig';
 
 const ReservationsTab = () => {
   const { userToken, userId } = useContext(AuthContext);
@@ -32,7 +33,7 @@ const ReservationsTab = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:5000/reservations', {
+      const response = await fetch(`${API_BASE_URL}/reservations`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +49,7 @@ const ReservationsTab = () => {
   
       const fetchRoomDetails = async (roomId) => {
         try {
-          const roomResponse = await fetch(`http://10.0.2.2:5000/rooms/${roomId}`, {
+          const roomResponse = await fetch(`${API_BASE_URL}/rooms/${roomId}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -171,7 +172,7 @@ const ReservationsTab = () => {
           onPress: async () => {
             try {
               // Usuwanie rezerwacji z backendu
-              const response = await fetch(`http://10.0.2.2:5000/reservations/${reservationId}`, {
+              const response = await fetch(`${API_BASE_URL}/reservations/${reservationId}`, {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',

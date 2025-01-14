@@ -12,6 +12,7 @@ import {
 import Header from '../components/Header';
 import { globalStyles } from '../styles/GlobalStyles';
 import { AuthContext } from '../context/AuthContext'
+import { API_BASE_URL } from '../config/apiConfig';
 
 
 const AvailableRoomsScreen = ({ route, navigation }) => {
@@ -34,7 +35,7 @@ const AvailableRoomsScreen = ({ route, navigation }) => {
       const has_projector = equipment.projector;
       const has_whiteboard = equipment.whiteboard;
 
-      const response = await fetch(`http://10.0.2.2:5000/rooms/available?startTime=${formattedDate}T${startTime}:00&endTime=${formattedDate}T${endTime}:00&projector=${has_projector}&whiteboard=${has_whiteboard}`, {
+      const response = await fetch(`${API_BASE_URL}/rooms/available?startTime=${formattedDate}T${startTime}:00&endTime=${formattedDate}T${endTime}:00&projector=${has_projector}&whiteboard=${has_whiteboard}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

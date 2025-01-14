@@ -11,6 +11,7 @@ import {
 import Header from '../components/Header';
 import { AuthContext } from '../context/AuthContext'
 import { authStyles } from '../styles/AuthStyles.js'
+import { API_BASE_URL } from '../config/apiConfig';
 
 const ProfileTab = () => {
   const { logout, userToken } = useContext(AuthContext);
@@ -20,7 +21,7 @@ const ProfileTab = () => {
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://10.0.2.2:5000/profile', {
+      const response = await fetch(`${API_BASE_URL}/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
