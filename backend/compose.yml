@@ -1,0 +1,37 @@
+services:
+  # Flask Backend
+  backend:
+    build:
+      context: .
+    container_name: flask-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+    depends_on:
+      - postgres
+    networks:
+      - my-network
+
+  # Postgres Database
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  my-network:
+    driver: bridge
