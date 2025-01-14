@@ -1,7 +1,7 @@
 services:
   # Flask Backend
   backend:
-    image: conf-room-booking
+    image: rikardoricz/conf-room-booking
     container_name: flask-backend
     ports:
       - 5000:5000
