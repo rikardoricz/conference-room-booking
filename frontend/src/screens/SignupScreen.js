@@ -34,7 +34,7 @@ const SignupScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={authStyles.container}>
-      <Text style={authStyles.title}>Signup Screen</Text>
+      <Text style={authStyles.title}>Sign up</Text>
       <View>
         <TextInput
           style={authStyles.input}

@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={authStyles.container}>
-      <Text style={authStyles.title}>Login Screen</Text>
+      <Text style={authStyles.title}>Login</Text>
       <View>
         <TextInput
           style={authStyles.input}
